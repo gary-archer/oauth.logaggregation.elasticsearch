@@ -1,0 +1,52 @@
+#
+# Our FunctionBeat configuration to deploy AWS Cloudwatch Lambda JSON logs to Elasticsearch
+#
+
+# A globally unique S3 bucket is needed
+functionbeat.provider.aws.endpoint: "s3.amazonaws.com"
+functionbeat.provider.aws.deploy_bucket: "functionbeat-deploy.authsamples.com"
+
+functionbeat.provider.aws.functions:
+  - name: lambdalogshipper
+    enabled: true
+    type: cloudwatch_logs
+    description: "Ships API Logs to ElasticCloud"
+
+    # Due to current limitations we must list each log group
+    triggers:
+      - log_group_name: /aws/lambda/serverlessapi-deployed-getCompanyList
+      - log_group_name: /aws/lambda/serverlessapi-deployed-getCompanyTransactions
+      - log_group_name: /aws/lambda/serverlessapi-deployed-getUserClaims
+      - log_group_name: /aws/lambda/tokenhandlerapi-deployed-startLogin
+      - log_group_name: /aws/lambda/tokenhandlerapi-deployed-endLogin
+      - log_group_name: /aws/lambda/tokenhandlerapi-deployed-refresh
+      - log_group_name: /aws/lambda/tokenhandlerapi-deployed-logout
+      - log_group_name: /aws/lambda/tokenhandlerapi-deployed-expire
+
+    processors:
+      # Deserialize JSON data into individual fields
+      - decode_json_fields:
+          fields: ["message"]
+          process_array: false
+          max_depth: 1
+          target: ""
+          overwrite_keys: true
+  
+setup.template.settings:
+  index.number_of_shards: 1
+
+setup.ilm.enabled: false
+setup.template.name: apilogs
+setup.template.pattern: apilogs-*
+
+processors:
+  - drop_fields:
+      fields: ['agent', 'ecs', 'host', 'input', 'version']
+
+output.elasticsearch:
+  hosts: ["7839b30852c64538ba5682676d472abc.eu-west-1.aws.found.io:9243"]
+  protocol: "https"
+  api_key: "id:apikey"
+  index: "apilogs-%{+yyyy.MM.dd}"
+  pipelines:
+    - pipeline: apilogs

@@ -1,0 +1,90 @@
+PUT _template/apilogs
+{
+  "index_patterns": ["apilogs*"],
+  "mappings": 
+  {
+    "properties": 
+    {
+      "id": 
+      {
+        "type": "keyword"
+      },
+      "utcTime": 
+      {
+        "type": "date"
+      },
+      "apiName": 
+      {
+        "type": "keyword"
+      },
+      "operationName": 
+      {
+        "type": "keyword"
+      },
+      "hostName": 
+      {
+        "type": "keyword"
+      },
+      "method": 
+      {
+        "type": "keyword"
+      },
+      "path": 
+      {
+        "type": "keyword"
+      },
+      "resourceId": 
+      {
+        "type": "keyword"
+      },
+      "clientApplicationName": 
+      {
+        "type": "keyword"
+      },
+      "userId": 
+      {
+        "type": "keyword"
+      },
+      "statusCode": 
+      {
+        "type": "integer"
+      },
+      "errorCode": 
+      {
+        "type": "keyword"
+      },
+      "errorId": 
+      {
+        "type": "integer"
+      },
+      "millisecondsTaken": 
+      {
+        "type": "integer"
+      },
+      "millisecondsThreshold": 
+      {
+        "type": "integer"
+      },
+      "correlationId": 
+      {
+        "type": "keyword"
+      },
+      "sessionId": 
+      {
+        "type": "keyword"
+      },
+      "performance": {
+        "type": "object",
+        "enabled": false
+      },
+      "errorData": {
+        "type": "object",
+        "enabled": false
+      },
+      "infoData": {
+        "type": "object",
+        "enabled": false
+      }
+    }
+  }
+}
