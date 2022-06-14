@@ -18,7 +18,7 @@ functionbeat.provider.aws.functions:
       - log_group_name: /aws/lambda/serverlessapi-deployed-getCompanyTransactions
       - log_group_name: /aws/lambda/serverlessapi-deployed-getUserClaims
       - log_group_name: /aws/lambda/tokenhandler-deployed-wildcard
-      - log_group_name: /aws/lambda/tokenhandler-local-wildcard
+      - log_group_name: /aws/lambda/tokenhandler-dev-wildcard
 
     processors:
       # Deserialize JSON data into individual fields
