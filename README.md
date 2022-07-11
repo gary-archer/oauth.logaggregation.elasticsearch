@@ -1,13 +1,45 @@
 # Elasticsearch Log Aggregation
 
-Utilities related to a theme of scalable and effective back end logging in software systems.
+Resources for deploying the Elastic Stack and using it to aggregate API logs.\
+The following notes describe the default local development setup.
 
-## Kubernetes End-to-End Solution
+## Prerequisites
 
-See the [OAuth Cloud Native](https://github.com/gary-archer/oauth.cloudnative.deployment) project for a container based setup that can be run locally.
+First ensure that API and Logs domains are added to the local hosts file:
 
-## Online Quick Start
+```text
+127.0.0.1  localhost api.authsamples-dev.com web.authsamples-dev.com localtokenhandler.authsamples-dev.com logs.authsamples-dev.com
+```
 
-See the end of the [Code Samples Quick Start](https://authguidance.com/home/code-samples-quickstart/) to login to a Cloud Kibana system and query your own activity.\
-See the [Cloud Elasticsearch](https://authguidance.com/2020/08/11/cloud-elastic-search-setup/) blog post for details on the managed service setup.
+## Docker Local Setup
 
+Then run the following script to deploy the Elastic Stack on the local computer:
+
+```bash
+./deployment/docker-local/deploy.sh
+```
+
+Wait for it to be ready and then connect to the ElasticSearch API to which logs will be sent:
+
+```bash
+curl -u 'elastic:Password1' https://logs.authsamples-dev.com:9200
+```
+
+Then login to Kibana at https://logs.authsamples-dev.com:5600 with credentials `elastic / Password1`:
+
+SCREENSHOT
+
+## Application Setup
+
+First run an integrated SPA and API solution in a parallel folder to generate logs visually.\
+Start by running one of this blog's final APIs:
+
+
+
+
+## Analyze API Logs
+
+Analyse logs generated from the UI, using the session ID.\
+Run the queries to diagnose your own activity:
+
+SCREENSHOT
