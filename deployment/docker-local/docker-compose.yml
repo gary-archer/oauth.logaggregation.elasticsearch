@@ -6,7 +6,7 @@ services:
   #
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.3.2
-    hostname: elastic-internal.authsamples-dev.com
+    hostname: elasticsearch-internal.authsamples-dev.com
     ports:
       - 9200:9200
     volumes:
@@ -21,14 +21,41 @@ services:
       xpack.security.http.ssl.certificate_authorities: '/usr/share/elasticsearch/config/certs/authsamples-dev.ca.crt'
       ELASTIC_PASSWORD: 'Password1'
 
-  #kibana:
-  #  image: docker.elastic.co/kibana/kibana:8.3.2
-  #  hostname: kibana-internal.authsamples-dev.com
-  #  ports:
-  #    - 5600:5600
+  #
+  # Deploy Kibana
+  #
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.3.2
+    hostname: kibana-internal.authsamples-dev.com
+    ports:
+      - 5601:5601
+    volumes:
+      - ./certs/authsamples-dev.ca.pem:/usr/share/kibana/config/certs/authsamples-dev.ca.crt
+      - ./certs/authsamples-dev.ssl.p12:/usr/share/kibana/config/certs/authsamples-dev.ssl.p12
+    environment:
+      ELASTICSEARCH_HOSTS: 'https://elasticsearch-internal.authsamples-dev.com:9200'
+      ELASTICSEARCH_USERNAME: 'kibana'
+      ELASTICSEARCH_PASSWORD: 'Password1'
+      SERVER_PUBLICBASEURL: 'https://logs.authsamples-dev.com:5601'
+      SERVER_SSL_ENABLED: 'true'
+      SERVER_SSL_KEYSTORE_PATH: '/usr/share/kibana/config/certs/authsamples-dev.ssl.p12'
+      SERVER_SSL_KEYSTORE_PASSWORD: 'Password1'
+      ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES: '/usr/share/kibana/config/certs/authsamples-dev.ca.crt'
 
-  #filebeat:
-  #  image: docker.elastic.co/beats/filebeat:8.3.2
-  #  hostname: filebeat-internal.authsamples-dev.com
-  #  extra_hosts:
-  #   - api.authsamples-dev.com:host-gateway
+  #
+  # Deploy Filebeat
+  #
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.3.2
+    hostname: filebeat-internal.authsamples-dev.com
+    extra_hosts:
+     - api.authsamples-dev.com:host-gateway
+    volumes:
+      - ../../../oauth.apisample.nodejs/logs:/var/logs/api
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ./certs/authsamples-dev.ca.pem:/usr/share/filebeat/certs/authsamples-dev.ca.crt
+    environment:
+      #ELASTICSEARCH_HOST: 'elasticsearch-internal.authsamples-dev.com'
+      #ELASTICSEARCH_PORT: 9200
+      ELASTICSEARCH_USERNAME: 'elastic'
+      ELASTICSEARCH_PASSWORD: 'Password1'
