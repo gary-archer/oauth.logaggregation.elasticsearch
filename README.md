@@ -37,9 +37,10 @@ Next connect to the ElasticSearch API to which logs will be sent:
 curl -u 'elastic:Password1' https://logs.authsamples-dev.com:9200
 ```
 
-Then login to Kibana at https://logs.authsamples-dev.com:5601 with credentials `kibana / Password1`:
+Then login to Kibana at https://logs.authsamples-dev.com:5601/app/dev_tools#/console with credentials `elastic / Password1`:
 
-SCREENSHOT
+![Kibana UI](./doc/kibana.png)
+
 
 ## Application Setup
 
@@ -71,19 +72,44 @@ cd oauth.websample.final
 
 When the system browser is opened, sign in with credentials `guestuser@mycompany.com / GuestPassword1`:
 
-SCREENSHOT
+![Login](./doc/login.png)
 
-You will then be able to see logs generated in the API for the SPA's session ID:
+You will then be able to view the SPA, whose session ID is written to API logs:
 
-SCREENSHOT
+![SPA](./doc/spa.png)
+
+You will also see the API and the logs generated, which are output to both console and log files:
+
+![API Logs](./doc/apilogs.png)
 
 ## Analyze API Logs
 
-Analyse logs generated from the UI, using the session ID.\
-Run the queries to diagnose your own activity:
+Analyse logs generated from your SPA activityy.\
+For example, long press the Reload Data button to cause an API exception.\
+Then slice and dice the error data via [SQL or Lucene queries](https://authguidance.com/api-technical-support-analysis/):
+
+```text
+GET apilogs*/_search
+{ 
+  "query" :
+  {
+    "match" :
+    {
+      "errorId" : 30229
+    }
+  }
+}
+```
+
+SCREENSHOT
+
+Alternatively look at recent log entries using the Live Analysis view:
 
 SCREENSHOT
 
 ## Free Resources
 
+Run these commands to tear down Docker networks:
+
+```
 TODO
