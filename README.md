@@ -37,14 +37,14 @@ Next connect to the ElasticSearch API to which logs will be sent:
 curl -u 'elastic:Password1' https://logs.authsamples-dev.com:9200
 ```
 
-Then login to Kibana at https://logs.authsamples-dev.com:5601/app/dev_tools#/console with credentials `elastic / Password1`:
+Then login to Kibana with credentials `elastic / Password1` and this URL:
+
+- https://logs.authsamples-dev.com:5601/app/dev_tools#/console
 
 ![Kibana UI](./doc/kibana.png)
 
-
 ## Application Setup
 
-First run an integrated SPA and API solution in a parallel folder to generate logs visually.\
 Start by running one of this blog's final APIs in a parallel folder:
 
 - [Final Node.js API](https://github.com/gary-archer/oauth.apisample.nodejs)
@@ -60,7 +60,7 @@ cd oauth.apisample.nodejs
 ./start.sh
 ```
 
-Next run this blog's final SPA against the local API:
+Next run this blog's final SPA in a setup where it calls the local API:
 
 ```bash
 cd ..
