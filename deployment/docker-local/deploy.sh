@@ -25,6 +25,14 @@ if [ $? -ne 0 ]; then
 fi
 
 #
+# Export environment variables to the Docker Compose file
+#
+export ELASTIC_USER
+export ELASTIC_PASSWORD
+export KIBANA_USER
+export KIBANA_PASSWORD
+
+#
 # Run the docker deployment to deploy Elasticsearch, Kibana and Filebeat
 #
 docker compose --project-name elasticstack up --force-recreate --detach
@@ -55,3 +63,11 @@ if [ "$HTTP_STATUS" != '200' ]; then
   echo "*** Problem encountered setting the Kibana password: $HTTP_STATUS"
   exit
 fi
+
+#
+# Create the Elasticsearch schema for apilogs
+#
+
+#
+# Create the Elasticsearch ingestion pipeline for apilogs
+#

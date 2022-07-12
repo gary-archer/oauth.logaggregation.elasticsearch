@@ -21,7 +21,7 @@ services:
       xpack.security.http.ssl.keystore.path: '/usr/share/elasticsearch/config/certs/authsamples-dev.ssl.p12'
       xpack.security.http.ssl.keystore.password: 'Password1'
       xpack.security.http.ssl.certificate_authorities: '/usr/share/elasticsearch/config/certs/authsamples-dev.ca.crt'
-      ELASTIC_PASSWORD: 'Password1'
+      ELASTIC_PASSWORD: '${ELASTIC_PASSWORD}'
 
   #
   # Deploy Kibana
@@ -36,8 +36,8 @@ services:
       - ./certs/authsamples-dev.ssl.p12:/usr/share/kibana/config/certs/authsamples-dev.ssl.p12
     environment:
       ELASTICSEARCH_HOSTS: 'https://elasticsearch-internal.authsamples-dev.com:9200'
-      ELASTICSEARCH_USERNAME: 'kibana'
-      ELASTICSEARCH_PASSWORD: 'Password1'
+      ELASTICSEARCH_USERNAME: '${KIBANA_USER}'
+      ELASTICSEARCH_PASSWORD: '${KIBANA_PASSWORD}'
       SERVER_PUBLICBASEURL: 'https://logs.authsamples-dev.com:5601'
       SERVER_SSL_ENABLED: 'true'
       SERVER_SSL_KEYSTORE_PATH: '/usr/share/kibana/config/certs/authsamples-dev.ssl.p12'
@@ -59,5 +59,5 @@ services:
     environment:
       #ELASTICSEARCH_HOST: 'elasticsearch-internal.authsamples-dev.com'
       #ELASTICSEARCH_PORT: 9200
-      ELASTICSEARCH_USERNAME: 'elastic'
-      ELASTICSEARCH_PASSWORD: 'Password1'
+      ELASTICSEARCH_USERNAME: '${ELASTIC_USER}'
+      ELASTICSEARCH_PASSWORD: '${ELASTIC_PASSWORD}'

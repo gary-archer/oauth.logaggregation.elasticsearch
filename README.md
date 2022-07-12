@@ -107,9 +107,13 @@ Alternatively look at recent log entries using the Live Analysis view:
 
 SCREENSHOT
 
-## Free Resources
+## Free Docker Resources
 
-Run these commands to tear down Docker networks:
+Run these commands to tear down all Docker containers:
 
+```bash
+cd logaggregation.elasticsearch
+./deployment/docker-local/teardown.sh
+cd ../oauth.websample.final
+./localtokenhandler/deployment/docker-local/teardown.sh
 ```
-TODO
