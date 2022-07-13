@@ -1,8 +1,7 @@
 filebeat.inputs:
 - type: log
-  enabled: true
   paths:
-    - /var/log/api/*/*.log
+  - /var/log/api/*.log
   json:
     keys_under_root: true
     add_error_key: false
@@ -16,7 +15,7 @@ output.elasticsearch:
   - pipeline: apilogs
   ssl:
     certificate_authorities: ['/usr/share/filebeat/certs/authsamples-dev.ca.crt']
-  
+
 setup:
   ilm:
     enabled: false

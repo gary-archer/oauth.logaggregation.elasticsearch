@@ -11,7 +11,7 @@
           "source": "ctx._id = ctx.id"
         },
         "remove": {
-          "field": ["log", "stream"],
+          "field": ["@timestamp", "log", "stream"],
           "ignore_missing": true
         }
       }
