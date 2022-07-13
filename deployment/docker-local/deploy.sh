@@ -21,7 +21,7 @@ KIBANA_PASSWORD='Password1'
 #
 ./downloadcerts.sh
 if [ $? -ne 0 ]; then
-  exit
+  exit 1
 fi
 
 #
@@ -67,7 +67,27 @@ fi
 #
 # Create the Elasticsearch schema for apilogs
 #
+HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_template/apilogs" \
+-u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
+-H "content-type: application/json" \
+-d @../../data/schema.json \
+-o /dev/null \
+-w '%{http_code}')
+if [ "$HTTP_STATUS" != '200' ]; then
+  echo "*** Problem encountered creating the apilogs schema: $HTTP_STATUS"
+  exit
+fi
 
 #
-# Create the Elasticsearch ingestion pipeline for apilogs
+# Create the Elasticsearch schema for apilogs
 #
+HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_ingest/pipeline/apilogs" \
+-u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
+-H "content-type: application/json" \
+-d @../../data/ingestion-pipeline.json \
+-o /dev/null \
+-w '%{http_code}')
+if [ "$HTTP_STATUS" != '200' ]; then
+  echo "*** Problem encountered creating the apilogs schema: $HTTP_STATUS"
+  exit
+fi
