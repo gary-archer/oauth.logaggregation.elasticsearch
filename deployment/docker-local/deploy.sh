@@ -88,6 +88,6 @@ HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_ingest/pipeline/apilogs" \
 -o /dev/null \
 -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
-  echo "*** Problem encountered creating the apilogs schema: $HTTP_STATUS"
+  echo "*** Problem encountered creating the apilogs ingestion pipeline: $HTTP_STATUS"
   exit
 fi

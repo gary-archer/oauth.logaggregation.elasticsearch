@@ -13,6 +13,10 @@
         "remove": {
           "field": ["log", "stream"],
           "ignore_missing": true
+        },
+        "date" : {
+          "field" : "utcTime",
+          "formats" : ["ISO8601"]
         }
       }
     ]

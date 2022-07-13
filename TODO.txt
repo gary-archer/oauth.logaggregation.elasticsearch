@@ -1,17 +1,9 @@
-STAGES
-------
-1. No ingest pipeline but drop_fields for cleaner logs
+1. Fix Node.js API to not write audit logs and to not use subfolders
 
-2. Ingest pipeline but without 'remove' fields
+2. Test .NET and Java APIs
 
+3. Get cloudnative deployment repo to use resources from here
 
-JSON Problems
--------------
-Filebeat logs:
- {\"type\":\"mapper_parsing_exception\",\"reason\":\"failed to parse\",\"caused_by\":{\"type\":\"illegal_argument_exception\",
- \"reason\":\"data stream timestamp field [@timestamp] is missing\"}}
+4. Tidy up README file
 
-https://stackoverflow.com/questions/56642800/how-to-read-json-file-using-filebeat-and-send-it-to-elasticsearch-via-logstash
-https://www.elastic.co/guide/en/ecs-logging/dotnet/master/setup.html
-
-Node.js writes subfolders and audit logs - get rid of these.
+5. Update Log Aggregation Setup blog post and describe processors
