@@ -1,10 +1,38 @@
-1. Complete README sequence since steps are not intuitive yet
-   API logs path to be a sibling folder on local computer
-   Update blog posts and API Docker / Kubernetes deployment to log to /var/log/api
+MERGE
+-----
+1. Update development certs screenshot
 
-2. Fix Node.js API to not write GUID subfolder
-   Test .NET and Java APIs also work OK and make them behave equivalent
+2. Complete README sequence since steps are not intuitive yet
+   Get Elastic components working and pointing to an empty folder:
+   - logaggregation.elasticsearch
+   - apilogs
+   
+   Requires build.sh followed by deploy.sh
 
-3. Get cloudnative deployment repo to use resources from here
+   Then just describe two scenarios with diagrams and links to further info:
+   - Populate logs from API tests
+   - Populate logs by running SPA against API
 
-4. Update Log Aggregation Setup blog post and describe processors
+   This keeps this repo's responsibilities manageable
+
+3. API logs path to be a sibling folder on local computer
+   Remove GUID subfolder
+
+4. See if I can remove utcTime after the Date processor
+   Use one day old API logs folder so that times are clear
+
+5. Tidy up resources and ensure queries are correct
+
+FUTURE
+------
+1. Docker token handler to write log files
+
+2. Final API blog posts to point to these two pages:
+   - ElasticSearch aggregation
+   - API Testing
+   
+3. APIs to log to /var/log/api in Docker containers
+
+4. Get cloudnative deployment repo to use resources from here
+
+5. Update Log Aggregation Setup blog post and describe processors
