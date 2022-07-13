@@ -7,6 +7,14 @@ The following notes describe the default local development setup.
 
 First ensure that Docker and Node.js are installed.
 
+## Configure Test Domains
+
+The confifure custom DNS names by adding these entries to the local computer's hosts file:
+
+```text
+127.0.0.1  localhost api.authsamples-dev.com login.authsamples-dev.com logs.authsamples-dev.com
+```
+
 ## Run an API Load Test
 
 Start by running one of this blog's final APIs in a parallel folder, to generate logs:
@@ -15,7 +23,7 @@ Start by running one of this blog's final APIs in a parallel folder, to generate
 - [Final .NET API](https://github.com/gary-archer/oauth.apisample.netcore)
 - [Final Java API](https://github.com/gary-archer/oauth.apisample.javaspringboot)
 
-If the Node.js API is used then the following commands would be run:
+Start the Node.js API and run a basic load test using the following commands:
 
 ```bash
 cd ..
@@ -25,15 +33,13 @@ npm run testsetup
 npm run loadtest
 ```
 
-## DNS and SSL Configuration
+This will generate bare JSON logs under a logs/*.log subfolder of the API:
 
-Next add DNS domains to the local computer by editing the hosts file:
+SCREENSHOT OF LOAD TEST AND LOGS
 
-```text
-127.0.0.1  localhost api.authsamples-dev.com login.authsamples-dev.com logs.authsamples-dev.com
-```
+## Configure SSL Trust
 
-Next trust the root certificate by adding it to your computer's SSL trust store:
+Trust the root certificate by adding it to your computer's SSL trust store:
 
 ```text
 oauth.apisample.nodejs/certs/authsamples-dev.ca.pem
@@ -88,3 +94,7 @@ cd logaggregation.elasticsearch
 cd ../oauth.websample.final
 ./localtokenhandler/deployment/docker-local/teardown.sh
 ```
+
+## Further Details
+
+TODO

@@ -1,9 +1,10 @@
-1. Fix Node.js API to not write audit logs and to not use subfolders
+1. Complete README sequence since steps are not intuitive yet
+   API logs path to be a sibling folder on local computer
+   Update blog posts and API Docker / Kubernetes deployment to log to /var/log/api
 
-2. Test .NET and Java APIs
+2. Fix Node.js API to not write GUID subfolder
+   Test .NET and Java APIs also work OK and make them behave equivalent
 
 3. Get cloudnative deployment repo to use resources from here
 
-4. Tidy up README file
-
-5. Update Log Aggregation Setup blog post and describe processors
+4. Update Log Aggregation Setup blog post and describe processors
