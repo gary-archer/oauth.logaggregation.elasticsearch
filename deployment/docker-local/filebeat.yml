@@ -1,7 +1,8 @@
 filebeat.inputs:
 - type: log
   paths:
-  - /var/log/api/*.log
+  - /var/log/finalapi/*.log
+  - /var/log/oauthagent/*.log
   json:
     keys_under_root: true
     add_error_key: false

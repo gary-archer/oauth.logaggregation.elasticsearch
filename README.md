@@ -32,7 +32,7 @@ Also trust the root certificate by adding it to your computer's SSL trust store:
 
 ## Deploy the Elastic Stack
 
-Then run the following script to deploy the Elastic Stack components to the local computer:
+Then run the following script to deploy Elastic Stack components to Docker:
 
 ```bash
 ./deployment/docker-local/deploy.sh
@@ -40,7 +40,7 @@ Then run the following script to deploy the Elastic Stack components to the loca
 
 ## Connect to Elasticsearch
 
-Next connect to the ElasticSearch API to which API logs will be sent:
+Next connect to the Elasticsearch API to which API logs will be sent:
 
 ```bash
 curl -k -u 'elastic:Password1' https://logs.authsamples-dev.com:9200
@@ -69,7 +69,7 @@ This brings back the default result with information about the cluster:
 
 ## Login to Kibana
 
-Then login to Kibana with credentials `elastic / Password1` and this URL:
+Then login to Kibana at the following URL, using credentials `elastic / Password1`:
 
 - https://logs.authsamples-dev.com:5601/app/dev_tools#/console
 
@@ -87,7 +87,7 @@ filebeat.inputs:
   - /var/log/oauthagent/*.log
 ```
 
-In the Docker Compose file these map to the following folders on the host computer:
+In the `docker-compose.yml` file these map to the following folders on the host computer:
 
 ```text
 ../oauth.apisample.nodejs/logs
@@ -147,8 +147,8 @@ Log entries from multiple APIs are received, where the `_source` object contains
 }
 ```
 
-You can then issue a collection of SQL or Lucene queries to slice and dice the data.\
-For a useful set of technical support queries, see the [API Platform Technical Analysis](https://authguidance.com/api-technical-support-analysis) page.
+You can then issue a collection of SQL or Lucene queries to slice and dice the API logs.\
+For a set of technical support queries, see the [API Platform Technical Analysis](https://authguidance.com/api-technical-support-analysis) page.
 
 ## Free Docker Resources
 
