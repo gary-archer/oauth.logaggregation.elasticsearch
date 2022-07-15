@@ -50,9 +50,10 @@ services:
     image: docker.elastic.co/beats/filebeat:8.3.2
     hostname: filebeat-internal.authsamples-dev.com
     volumes:
-      - ../../../oauth.apisample.nodejs/logs:/var/log/api
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./certs/authsamples-dev.ca.pem:/usr/share/filebeat/certs/authsamples-dev.ca.crt
+      - ../../../oauth.apisample.nodejs/logs:/var/log/finalapi
+      - ../../../oauth.tokenhandler.docker/logs:/var/log/oauthagent
     environment:
       ELASTICSEARCH_USERNAME: '${ELASTIC_USER}'
       ELASTICSEARCH_PASSWORD: '${ELASTIC_PASSWORD}'

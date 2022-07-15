@@ -10,9 +10,9 @@ functionbeat.provider.aws.functions:
   - name: lambdalogshipper
     enabled: true
     type: cloudwatch_logs
-    description: "Ships API Logs to ElasticCloud"
+    description: "Ships Cloudfront API Logs to ElasticCloud"
 
-    # Due to current limitations we must list each log group
+    # Functionbeat requires each individual lambda function to be listed
     triggers:
       - log_group_name: /aws/lambda/serverlessapi-deployed-getCompanyList
       - log_group_name: /aws/lambda/serverlessapi-deployed-getCompanyTransactions
@@ -21,7 +21,7 @@ functionbeat.provider.aws.functions:
       - log_group_name: /aws/lambda/tokenhandler-dev-wildcard
 
     processors:
-      # Deserialize JSON data into individual fields
+      # Deserialize the message field from the Cloudfront log entry into an object
       - decode_json_fields:
           fields: ["message"]
           process_array: false

@@ -8,11 +8,11 @@
 	<string>filebeat</string>
 	<key>ProgramArguments</key>
 	<array>
-		<string>/Users/gary/logaggregation/filebeat-7.2.0-darwin-x86_64/filebeat</string>
+		<string>/Users/gary/logaggregation/filebeat-8.3.0-darwin-x86_64/filebeat</string>
 		<string>-c</string>
-		<string>/Users/gary/logaggregation/filebeat-7.2.0-darwin-x86_64/filebeat.yml</string>
+		<string>/Users/gary/logaggregation/filebeat-8.3.0-darwin-x86_64/filebeat.yml</string>
 		<string>-path.home</string>
-		<string>/Users/gary/logaggregation/filebeat-7.2.0-darwin-x86_64</string>
+		<string>/Users/gary/logaggregation/filebeat-8.3.0-darwin-x86_64</string>
 	</array>
 	<key>RunAtLoad</key>
 	<true/>

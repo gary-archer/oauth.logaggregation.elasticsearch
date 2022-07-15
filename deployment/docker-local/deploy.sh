@@ -70,7 +70,7 @@ fi
 HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_template/apilogs" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H "content-type: application/json" \
--d @../../data/schema.json \
+-d @../../data/elastic/schema.json \
 -o /dev/null \
 -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
@@ -84,7 +84,7 @@ fi
 HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_ingest/pipeline/apilogs" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H "content-type: application/json" \
--d @../../data/ingestion-pipeline.json \
+-d @../../data/elastic/ingestion-pipeline-cloudnative.json \
 -o /dev/null \
 -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then

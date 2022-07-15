@@ -10,13 +10,13 @@
           "description": "Use a client side unique id to prevent duplicates",
           "source": "ctx._id = ctx.id"
         },
-        "remove": {
-          "field": ["log", "stream"],
-          "ignore_missing": true
-        },
         "date" : {
           "field" : "utcTime",
           "formats" : ["ISO8601"]
+        },
+        "remove": {
+          "field": ["log", "stream", "utcTime"],
+          "ignore_missing": true
         }
       }
     ]
