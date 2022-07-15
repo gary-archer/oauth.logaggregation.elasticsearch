@@ -8,7 +8,7 @@ This is part of an overall [Effective API Logging](https://authguidance.com/effe
 The following notes describe a Docker based local development setup.\
 For an end-to-end Kubernetes example, run the [Cloud Native Deployment](https://github.com/gary-archer/oauth.cloudnative.deployment) instead.
 
-## Download SSL Certificates
+### Download SSL Certificates
 
 First ensure that Docker is installed and run the following script first:
 
@@ -16,7 +16,7 @@ First ensure that Docker is installed and run the following script first:
 ./deployment/docker-local/downloadcerts.sh
 ```
 
-## Configure DNS and SSL
+### Configure DNS and SSL
 
 Add the External URL for Elasticsearch and Kibana to your hosts file:
 
@@ -30,7 +30,7 @@ Also trust the root certificate by adding it to your computer's SSL trust store:
 ./deployment/docker-local/certs/authsamples-dev.ca.pem
 ```
 
-## Deploy the Elastic Stack
+### Deploy the Elastic Stack
 
 Then run the following script to deploy Elastic Stack components to Docker:
 
@@ -38,7 +38,7 @@ Then run the following script to deploy Elastic Stack components to Docker:
 ./deployment/docker-local/deploy.sh
 ```
 
-## Connect to Elasticsearch
+### Connect to Elasticsearch
 
 Next connect to the Elasticsearch API to which API logs will be sent:
 
@@ -67,7 +67,7 @@ This brings back the default result with information about the cluster:
 }
 ```
 
-## Login to Kibana
+### Login to Kibana
 
 Then login to Kibana at the following URL, using credentials `elastic / Password1`:
 
@@ -75,7 +75,7 @@ Then login to Kibana at the following URL, using credentials `elastic / Password
 
 ![Kibana UI](./doc/kibana.png)
 
-## Understand Filebeat Log Shipping
+### Understand Filebeat Log Shipping
 
 Filebeat picks up logs from these locations within its container:
 
@@ -94,7 +94,7 @@ In the `docker-compose.yml` file these map to the following folders on the host 
 ../oauth.tokenhandler.docker/logs
 ```
 
-## Run a Local API to Generate Logs
+### Run a Local API to Generate Logs
 
 Follow these blog posts to run one of my Final APIs.\
 The posts describe how a basic load test can be run to generate logs:
@@ -107,7 +107,7 @@ Optionally also connect the Final SPA to the local API, and diagnose your own UI
 
 - [Final SPA](https://authguidance.com/final-spa-overview/)
 
-## Analyse Logs
+### Analyse Logs
 
 First run a Kibana query to verify that logs are being received:
 
@@ -150,7 +150,7 @@ Log entries from multiple APIs are received, where the `_source` object contains
 You can then issue a collection of SQL or Lucene queries to slice and dice the API logs.\
 For a set of technical support queries, see the [API Platform Technical Analysis](https://authguidance.com/api-technical-support-analysis) page.
 
-## Free Docker Resources
+### Free Docker Resources
 
 When finished with logging, run this command to tear down all Elastic Stack resources:
 
