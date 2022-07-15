@@ -8,7 +8,7 @@ This is part of an overall [Effective API Logging](https://authguidance.com/effe
 The following notes describe a Docker based local development setup.\
 For an end-to-end Kubernetes example, run the [Cloud Native Deployment](https://github.com/gary-archer/oauth.cloudnative.deployment) instead.
 
-## Download SSL Certificatea
+## Download SSL Certificates
 
 First ensure that Docker is installed and run the following script first:
 
