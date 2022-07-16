@@ -89,7 +89,7 @@ filebeat.inputs:
   - /var/log/oauthagent/*.log
 ```
 
-In the `docker-compose.yml` file these map to the following folders on the host computer:
+In the `docker-compose.yml` file these map to the following folders shared from the host computer:
 
 ```text
 ../oauth.apisample.nodejs/logs
