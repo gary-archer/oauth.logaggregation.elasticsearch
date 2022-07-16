@@ -83,7 +83,9 @@ Filebeat picks up logs from these locations within its container:
 filebeat.inputs:
 - type: log
   paths:
-  - /var/log/finalapi/*.log
+  - /var/log/nodejsapi/*.log
+  - /var/log/netcoreapi/*.log
+  - /var/log/javaapi/*.log
   - /var/log/oauthagent/*.log
 ```
 
@@ -91,6 +93,8 @@ In the `docker-compose.yml` file these map to the following folders on the host 
 
 ```text
 ../oauth.apisample.nodejs/logs
+../oauth.apisample.netcore/logs
+../oauth.apisample.javaspringboot/logs
 ../oauth.tokenhandler.docker/logs
 ```
 

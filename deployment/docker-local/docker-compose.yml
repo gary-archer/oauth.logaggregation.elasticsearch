@@ -52,7 +52,9 @@ services:
     volumes:
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./certs/authsamples-dev.ca.pem:/usr/share/filebeat/certs/authsamples-dev.ca.crt
-      - ../../../oauth.apisample.nodejs/logs:/var/log/finalapi
+      - ../../../oauth.apisample.nodejs/logs:/var/log/nodejsapi
+      - ../../../oauth.apisample.netcore/logs:/var/log/netcoreapi
+      - ../../../oauth.apisample.javaspringboot/logs:/var/log/javaapi
       - ../../../oauth.tokenhandler.docker/logs:/var/log/oauthagent
     environment:
       ELASTICSEARCH_USERNAME: '${ELASTIC_USER}'
