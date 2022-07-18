@@ -13,6 +13,19 @@ spec:
       name: es-initdata-job
     spec:
       restartPolicy: Never
+      volumes:
+        - name: schema-json
+          configMap:
+            name: schema-json
+        - name: ingestion-json
+          configMap:
+            name: ingestion-json
+        - name: wait-script
+          configMap:
+            name: wait-script
+        - name: init-script
+          configMap:
+            name: init-script
       initContainers:
         - name: wait-for-elasticearch
           image: alpine
@@ -28,19 +41,6 @@ spec:
               "-c",
               "/tmp/wait-script.sh",
             ]
-      volumes:
-        - name: schema-json
-          configMap:
-            name: schema-json
-        - name: ingestion-json
-          configMap:
-            name: ingestion-json
-        - name: wait-script
-          configMap:
-            name: wait-script
-        - name: init-script
-          configMap:
-            name: init-script
       containers:
         - name: es-initdata-job
           image: appropriate/curl
