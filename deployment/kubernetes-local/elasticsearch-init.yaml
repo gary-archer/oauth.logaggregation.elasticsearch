@@ -23,9 +23,39 @@ spec:
               "-c",
               "for i in $(seq 1 300); do nc -zvw1 elasticsearch-svc 9200 && exit 0 || sleep 2; done; exit 1",
             ]
+      volumes:
+        - name: schema-json
+          configMap:
+            name: schema-json
+        - name: ingestion-json
+          configMap:
+            name: ingestion-json
+        - name: wait-script
+          configMap:
+            name: wait-script
+        - name: init-script
+          configMap:
+            name: init-script
       containers:
         - name: es-initdata-job
           image: appropriate/curl
+          volumeMounts:
+          - name: schema-json
+            mountPath: /tmp/schema.json
+            subPath: schema.json
+            readOnly: true
+          - name: ingestion-json
+            mountPath: /tmp/ingestion.json
+            subPath: ingestion.json
+            readOnly: true
+          - name: wait-script
+            mountPath: /tmp/wait-script.sh
+            subPath: wait-script.sh
+            readOnly: true
+          - name: init-script
+            mountPath: /tmp/init-script.sh
+            subPath: init-script.sh
+            readOnly: true
           env:
             - name: ELASTICSEARCH_PASSWORD
               value: Password1
