@@ -16,6 +16,11 @@ spec:
       initContainers:
         - name: wait-for-elasticearch
           image: alpine
+          volumeMounts:
+          - name: wait-script
+            mountPath: /tmp/wait-script.sh
+            subPath: wait-script.sh
+            readOnly: true
           command:
             # Wait for Elasticsearch to come up
             [
@@ -47,10 +52,6 @@ spec:
           - name: ingestion-json
             mountPath: /tmp/ingestion.json
             subPath: ingestion.json
-            readOnly: true
-          - name: wait-script
-            mountPath: /tmp/wait-script.sh
-            subPath: wait-script.sh
             readOnly: true
           - name: init-script
             mountPath: /tmp/init-script.sh
