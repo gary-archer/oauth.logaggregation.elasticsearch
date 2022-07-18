@@ -45,7 +45,7 @@ spec:
             - name: ELASTICSEARCH_HOSTS
               value: 'https://elasticsearch-svc:9200'
             - name: ELASTICSEARCH_USERNAME
-              value: 'elastic'
+              value: 'kibana'
             - name: ELASTICSEARCH_PASSWORD
               value: 'Password1'
             - name: SERVER_PUBLICBASEURL

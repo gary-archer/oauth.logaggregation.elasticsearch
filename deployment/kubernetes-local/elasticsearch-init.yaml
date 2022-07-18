@@ -65,6 +65,11 @@ spec:
             - /bin/sh
             - -c
             - |
+              curl -k -u elastic:$ELASTICSEARCH_PASSWORD -X POST https://elasticsearch-svc:9200/_security/user/kibana/_password -H 'Content-Type: application/json' -d '
+              {
+                "password": "Password1"
+              }
+              '
               curl -k -u elastic:$ELASTICSEARCH_PASSWORD -X PUT https://elasticsearch-svc:9200/_template/apilogs -H 'Content-Type: application/json' -d '
               {
                 "index_patterns": ["apilogs*"],
