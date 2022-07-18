@@ -13,27 +13,27 @@ spec:
       name: es-initdata-job
     spec:
       restartPolicy: Never
-      #volumes:
-      #  - name: schema-json
-      #    configMap:
-      #      name: schema-json
-      #  - name: ingestion-json
-      #    configMap:
-      #      name: ingestion-json
-      #  - name: wait-script
-      #    configMap:
-      #      name: wait-script
-      #  - name: init-script
-      #    configMap:
-      #      name: init-script
+      volumes:
+        - name: schema-json
+          configMap:
+            name: schema-json
+        - name: ingestion-json
+          configMap:
+            name: ingestion-json
+        - name: wait-script
+          configMap:
+            name: wait-script
+        - name: init-script
+          configMap:
+            name: init-script
       initContainers:
         - name: wait-for-elasticearch
           image: alpine
-          #volumeMounts:
-          #- name: wait-script
-          #  mountPath: /tmp/wait-script.sh
-          #  subPath: wait-script.sh
-          #  readOnly: true
+          volumeMounts:
+          - name: wait-script
+            mountPath: /tmp/wait-script.sh
+            subPath: wait-script.sh
+            readOnly: true
           command:
             # Wait for Elasticsearch to come up
             [
@@ -44,19 +44,19 @@ spec:
       containers:
         - name: es-initdata-job
           image: appropriate/curl
-          #volumeMounts:
-          #- name: schema-json
-          #  mountPath: /tmp/schema.json
-          #  subPath: schema.json
-          #  readOnly: true
-          #- name: ingestion-json
-          #  mountPath: /tmp/ingestion.json
-          #  subPath: ingestion.json
-          #  readOnly: true
-          #- name: init-script
-          #  mountPath: /tmp/init-script.sh
-          #  subPath: init-script.sh
-          #  readOnly: true
+          volumeMounts:
+          - name: schema-json
+            mountPath: /tmp/schema.json
+            subPath: schema.json
+            readOnly: true
+          - name: ingestion-json
+            mountPath: /tmp/ingestion.json
+            subPath: ingestion.json
+            readOnly: true
+          - name: init-script
+            mountPath: /tmp/init-script.sh
+            subPath: init-script.sh
+            readOnly: true
           env:
             - name: ELASTICSEARCH_PASSWORD
               value: Password1
