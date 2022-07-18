@@ -35,6 +35,7 @@ export KIBANA_PASSWORD
 #
 # Run the docker deployment to deploy Elasticsearch, Kibana and Filebeat
 #
+echo 'Deploying the Elastic Stack ...'
 docker compose --project-name elasticstack up --force-recreate --detach
 if [ $? -ne 0 ]; then
   echo "Problem encountered running Docker image"
@@ -53,6 +54,7 @@ done
 # Register the kibana user's password in Elasticsearch to prevent a 'Kibana server is not ready yet' error
 # We do not use this account, but this registration seems to be a requirement in Kibana 8.x
 #
+echo 'Registering the default Kibana user ...'
 HTTP_STATUS=$(curl -k -s -X POST "$ELASTIC_URL/_security/user/$KIBANA_USER/_password" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H "content-type: application/json" \
@@ -67,6 +69,7 @@ fi
 #
 # Create the Elasticsearch schema for apilogs
 #
+echo 'Creating the Elasticsearch schema ...'
 HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_template/apilogs" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H "content-type: application/json" \
@@ -81,6 +84,7 @@ fi
 #
 # Create the Elasticsearch schema for apilogs
 #
+echo 'Creating the Elasticsearch ingestion pipeline ...'
 HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_ingest/pipeline/apilogs" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H "content-type: application/json" \
