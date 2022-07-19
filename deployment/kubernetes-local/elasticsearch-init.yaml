@@ -23,16 +23,16 @@ spec:
         - name: wait-script
           configMap:
             name: wait-script
-        - name: init-script
+        - name: initdata-script
           configMap:
-            name: init-script
+            name: initdata-script
       initContainers:
         - name: wait-for-elasticearch
           image: alpine
           volumeMounts:
           - name: wait-script
-            mountPath: /tmp/wait-script.sh
-            subPath: wait-script.sh
+            mountPath: /tmp/wait.sh
+            subPath: wait.sh
             readOnly: true
           env:
             - name: ELASTIC_URL
@@ -45,7 +45,7 @@ spec:
             # Wait for Elasticsearch to become ready
             [
               "sh",
-              "/tmp/wait-script.sh"
+              "/tmp/wait.sh"
             ]
       containers:
         - name: es-initdata-job
@@ -59,9 +59,9 @@ spec:
             mountPath: /tmp/ingestion.json
             subPath: ingestion.json
             readOnly: true
-          - name: init-script
-            mountPath: /tmp/init-script.sh
-            subPath: init-script.sh
+          - name: initdata-script
+            mountPath: /tmp/initdata.sh
+            subPath: initdata.sh
             readOnly: true
           env:
             - name: ELASTIC_URL
@@ -76,4 +76,4 @@ spec:
               value: Password1
           command:
             # Initialize Elasticsearch data
-            - /bin/sh /tmp/init-script.sh
+            - /bin/sh /tmp/initdata.sh

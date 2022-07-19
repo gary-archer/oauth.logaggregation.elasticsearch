@@ -46,7 +46,7 @@ fi
 #
 # Run the wait script, to ensure that Elasticsearch is available
 #
-../utils/wait-script.sh
+../utils/wait.sh
 if [ $? -ne 0 ]; then
   exit 1
 fi
@@ -54,7 +54,7 @@ fi
 #
 # Run the script to create the initial Elasticsearch data
 #
-../utils/init-data.sh
+../utils/initdata.sh
 if [ $? -ne 0 ]; then
   exit 1
 fi
