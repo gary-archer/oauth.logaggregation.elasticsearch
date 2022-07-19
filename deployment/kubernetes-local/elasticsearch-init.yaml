@@ -27,8 +27,8 @@ spec:
           configMap:
             name: initdata-script
       initContainers:
-        - name: wait-for-elasticearch
-          image: alpine
+        - name: wait-for-elasticsearch
+          image: appropriate/curl
           volumeMounts:
           - name: wait-script
             mountPath: /tmp/wait.sh
@@ -74,6 +74,13 @@ spec:
               value: kibana
             - name: KIBANA_PASSWORD
               value: Password1
+            - name: SCHEMA_FILE_PATH
+              value: /tmp/schema.json
+            - name: INGESTION_PIPELINE_FILE_PATH
+              value: /tmp/ingestion.json
           command:
             # Initialize Elasticsearch data
-            - /bin/sh /tmp/initdata.sh
+            [
+              "sh",
+              "/tmp/initdata.sh"
+            ]

@@ -15,6 +15,8 @@ ELASTIC_USER='elastic'
 ELASTIC_PASSWORD='Password1'
 KIBANA_USER='kibana'
 KIBANA_PASSWORD='Password1'
+SCHEMA_FILE_PATH='../data/schema.json'
+INGESTION_PIPELINE_FILE_PATH='../data/ingestion-pipeline-cloudnative.json'
 
 #
 # Download development SSL certificates if required
@@ -32,6 +34,8 @@ export ELASTIC_USER
 export ELASTIC_PASSWORD
 export KIBANA_USER
 export KIBANA_PASSWORD
+export SCHEMA_FILE_PATH
+export INGESTION_PIPELINE_FILE_PATH
 
 #
 # Run the docker deployment to deploy Elasticsearch, Kibana and Filebeat

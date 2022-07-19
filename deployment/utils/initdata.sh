@@ -29,6 +29,14 @@ if [ "$KIBANA_PASSWORD" == '' ]; then
   echo 'The environment variable KIBANA_PASSWORD is not set'
   exit 1
 fi
+if [ "$SCHEMA_FILE_PATH" == '' ]; then
+  echo 'The environment variable SCHEMA_FILE_PATH is not set'
+  exit 1
+fi
+if [ "$INGESTION_PIPELINE_FILE_PATH" == '' ]; then
+  echo 'The environment variable INGESTION_PIPELINE_FILE_PATH is not set'
+  exit 1
+fi
 
 #
 # Register the kibana user's password in Elasticsearch to prevent a 'Kibana server is not ready yet' error
@@ -53,7 +61,7 @@ echo 'Creating the Elasticsearch schema ...'
 HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_template/apilogs" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H "content-type: application/json" \
--d @../data/schema.json \
+-d @"$SCHEMA_FILE_PATH" \
 -o /dev/null \
 -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
@@ -68,7 +76,7 @@ echo 'Creating the Elasticsearch ingestion pipeline ...'
 HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_ingest/pipeline/apilogs" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H "content-type: application/json" \
--d @../data/ingestion-pipeline-cloudnative.json \
+-d @"$INGESTION_PIPELINE_FILE_PATH" \
 -o /dev/null \
 -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
