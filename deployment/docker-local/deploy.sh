@@ -25,8 +25,9 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# Export environment variables to the Docker Compose file
+# Export environment variables to the Docker Compose file and scripts
 #
+export ELASTIC_URL
 export ELASTIC_USER
 export ELASTIC_PASSWORD
 export KIBANA_USER
@@ -43,55 +44,17 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# Wait for endpoints to become available
+# Run the wait script, to ensure that Elasticsearch is available
 #
-echo 'Waiting for Elasticsearch endpoints to become available ...'
-while [ "$(curl -k -s -o /dev/null -w ''%{http_code}'' "$ELASTIC_URL" -u 'elastic:Password1')" != '200' ]; do
-  sleep 2
-done
-
-#
-# Register the kibana user's password in Elasticsearch to prevent a 'Kibana server is not ready yet' error
-# We do not use this account, but this registration seems to be a requirement in Kibana 8.x
-#
-echo 'Registering the default Kibana user ...'
-HTTP_STATUS=$(curl -k -s -X POST "$ELASTIC_URL/_security/user/$KIBANA_USER/_password" \
--u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
--H "content-type: application/json" \
--d "{\"password\":\"$KIBANA_PASSWORD\"}" \
--o /dev/null \
--w '%{http_code}')
-if [ "$HTTP_STATUS" != '200' ]; then
-  echo "*** Problem encountered setting the Kibana password: $HTTP_STATUS"
-  exit
+../utils/wait-script.sh
+if [ $? -ne 0 ]; then
+  exit 1
 fi
 
 #
-# Create the Elasticsearch schema for apilogs
+# Run the script to create the initial Elasticsearch data
 #
-echo 'Creating the Elasticsearch schema ...'
-HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_template/apilogs" \
--u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
--H "content-type: application/json" \
--d @../../data/elastic/schema.json \
--o /dev/null \
--w '%{http_code}')
-if [ "$HTTP_STATUS" != '200' ]; then
-  echo "*** Problem encountered creating the apilogs schema: $HTTP_STATUS"
-  exit
-fi
-
-#
-# Create the Elasticsearch schema for apilogs
-#
-echo 'Creating the Elasticsearch ingestion pipeline ...'
-HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_ingest/pipeline/apilogs" \
--u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
--H "content-type: application/json" \
--d @../../data/elastic/ingestion-pipeline-cloudnative.json \
--o /dev/null \
--w '%{http_code}')
-if [ "$HTTP_STATUS" != '200' ]; then
-  echo "*** Problem encountered creating the apilogs ingestion pipeline: $HTTP_STATUS"
-  exit
+../utils/init-data.sh
+if [ $? -ne 0 ]; then
+  exit 1
 fi
