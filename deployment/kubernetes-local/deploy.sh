@@ -33,30 +33,30 @@ fi
 # Create configmaps for JSON files and scripts used by the Elasticsearch init job
 #
 kubectl -n elasticstack delete configmap schema-json 2>/dev/null
-kubectl -n elasticstack create configmap schema-json --from-file=../../data/elastic/schema.json
+kubectl -n elasticstack create configmap schema-json --from-file=../data/schema.json
 if [ $? -ne 0 ]; then
   echo '*** Problem encountered creating the config map for the Elasticsearch schema data'
   exit 1
 fi
 
 kubectl -n elasticstack delete configmap ingestion-json 2>/dev/null
-kubectl -n elasticstack create configmap ingestion-json --from-file=../../data/elastic/ingestion-pipeline-cloudnative.json
+kubectl -n elasticstack create configmap ingestion-json --from-file=../data/ingestion-pipeline-cloudnative.json
 if [ $? -ne 0 ]; then
   echo '*** Problem encountered creating the config map for the Elasticsearch ingestion pipeline data'
   exit 1
 fi
 
 kubectl -n elasticstack delete configmap wait-script 2>/dev/null
-kubectl -n elasticstack create configmap wait-script --from-file=./wait-script.sh
+kubectl -n elasticstack create configmap wait-script --from-file=../utils/wait.sh
 if [ $? -ne 0 ]; then
   echo '*** Problem encountered creating the config map for the Elasticsearch wait script'
   exit 1
 fi
 
-kubectl -n elasticstack delete configmap init-script 2>/dev/null
-kubectl -n elasticstack create configmap init-script --from-file=./init-script.sh
+kubectl -n elasticstack delete configmap initdata-script 2>/dev/null
+kubectl -n elasticstack create configmap initdata-script --from-file=../utils/initdata.sh
 if [ $? -ne 0 ]; then
-  echo '*** Problem encountered creating the config map for the Elasticsearch init script'
+  echo '*** Problem encountered creating the config map for the Elasticsearch init data script'
   exit 1
 fi
 
