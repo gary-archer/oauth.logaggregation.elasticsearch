@@ -56,8 +56,8 @@ spec:
             subPath: schema.json
             readOnly: true
           - name: ingestion-json
-            mountPath: /tmp/ingestion.json
-            subPath: ingestion.json
+            mountPath: /tmp/ingestion-pipeline-cloudnative.json
+            subPath: ingestion-pipeline-cloudnative.json
             readOnly: true
           - name: initdata-script
             mountPath: /tmp/initdata.sh
@@ -77,7 +77,7 @@ spec:
             - name: SCHEMA_FILE_PATH
               value: /tmp/schema.json
             - name: INGESTION_PIPELINE_FILE_PATH
-              value: /tmp/ingestion.json
+              value: /tmp/ingestion-pipeline-cloudnative.json
           command:
             # Initialize Elasticsearch data
             [
