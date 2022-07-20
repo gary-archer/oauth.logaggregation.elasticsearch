@@ -48,6 +48,7 @@ services:
   #
   filebeat:
     image: docker.elastic.co/beats/filebeat:8.3.2
+    command: filebeat -e -strict.perms=false
     hostname: filebeat-internal.authsamples-dev.com
     volumes:
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
