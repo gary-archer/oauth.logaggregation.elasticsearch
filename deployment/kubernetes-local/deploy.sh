@@ -91,6 +91,16 @@ if [ $? -ne 0 ]; then
 fi
 
 #
+# Create a configmap to deploy the root certificate that filebeat must trust in order to call Elasticsearch over SSL
+#
+kubectl -n elasticstack delete configmap filebeat-root-cert 2>/dev/null
+kubectl -n elasticstack create configmap filebeat-root-cert --from-file=../../../certs/default.svc.cluster.local.ca.pem
+if [ $? -ne 0 ]; then
+  echo '*** Problem creating Filebeat SSL root CA configmap'
+  exit 1
+fi
+
+#
 # Trigger deployment of Filebeat components to the Kubernetes cluster
 #
 kubectl -n elasticstack delete -f ./filebeat.yaml 2>/dev/null
