@@ -7,12 +7,14 @@ functionbeat.provider.aws.endpoint: "s3.amazonaws.com"
 functionbeat.provider.aws.deploy_bucket: "functionbeat-deploy.authsamples.com"
 
 functionbeat.provider.aws.functions:
-  - name: lambdalogshipper
+  - name: logshipper
     enabled: true
     type: cloudwatch_logs
     description: "Ships Cloudfront API Logs to ElasticCloud"
 
-    # Functionbeat requires each individual lambda function to be listed
+    # Functionbeat requires log groups for each individual lambda function to be listed
+    # This works well enough for my demos but would be a problem in larger setups
+    # https://github.com/elastic/beats/issues/10756
     triggers:
       - log_group_name: /aws/lambda/serverlessapi-deployed-getCompanyList
       - log_group_name: /aws/lambda/serverlessapi-deployed-getCompanyTransactions

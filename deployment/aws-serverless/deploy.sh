@@ -59,11 +59,12 @@ envsubst < "$FUNCTIONBEAT_TEMPLATE_FILE" > functionbeat.yml
 cat functionbeat.yml
 
 #
-# Finally recreate the AWS lambda
+# Finally recreate the AWS lambda and use a name not greater than 11 characters 
+# https://github.com/elastic/beats/issues/30270
 #
 echo 'Updating AWS log shipping lambda ...'
-./functionbeat -v -e -d "*" remove lambdalogshipper
-./functionbeat -v -e -d "*" deploy lambdalogshipper
+./functionbeat -v -e -d "*" remove logshipper
+./functionbeat -v -e -d "*" deploy logshipper
 if [ $? -ne 0 ]; then
   echo '*** Problem encountered creating functionbeat lambda in AWS'
   exit
