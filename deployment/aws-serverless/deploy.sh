@@ -1,9 +1,70 @@
 #!/bin/bash
 
-######################################################################
-# A script to deploy FunctionBeat to AWS to run as a Serverless Lambda
-# It then ships logs to my online Elastic Cloud managed service
+################################################################################
+# A script to deploy Functionbeat to AWS to run as a Serverless Lambda
+# This then ships logs for my APIs to Elasticsearch running as a managed service
 # https://authguidance.com/cloud-elastic-search-setup
-######################################################################
+################################################################################
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
+
+#
+# The API key must be provided as an environment variable
+#
+if [ "$ELASTICSEARCH_API_KEY" == '' ]; then
+  echo '*** The ELASTICSEARCH_API_KEY parameter must be provided'
+  exit
+fi
+
+#
+# Define other properties
+#
+RESOURCES_FOLDER='../../resources'
+FUNCTIONBEAT_FOLDER='functionbeat-8.3.2-darwin-x86_64'
+FUNCTIONBEAT_DOWNLOAD_URL="https://artifacts.elastic.co/downloads/beats/functionbeat/$FUNCTIONBEAT_FOLDER.tar.gz"
+
+#
+# Download functionbeat
+#
+echo 'Downloading functionbeat ...'
+cd ../..
+rm -rf resources 2>/dev/null
+mkdir resources
+cd resources
+HTTP_STATUS=$(curl -s -O "$FUNCTIONBEAT_DOWNLOAD_URL" -w '%{http_code}')
+if [ "$HTTP_STATUS" != '200' ]; then
+  echo "*** Problem encountered downloading functionbeat: $HTTP_STATUS"
+  exit
+fi
+
+#
+# Unpack resources
+#
+echo 'Unzipping functionbeat ...'
+tar xf "$FUNCTIONBEAT_FOLDER.tar.gz"
+if [ $? -ne 0 ]; then
+  echo '*** Problem encountered unzipping functionbeat'
+  exit
+fi
+cd "$FUNCTIONBEAT_FOLDER"
+ls
+
+#
+# Update the configuration by replacing the functionbeat.yml file
+#
+echo 'Updating functionbeat configuration ...'
+FUNCTIONBEAT_TEMPLATE_FILE='../../deployment/aws-serverless/functionbeat.8.3.2.template.yml'
+export ELASTICSEARCH_API_KEY
+envsubst < "$FUNCTIONBEAT_TEMPLATE_FILE" > functionbeat.yml
+cat functionbeat.yml
+
+#
+# Finally recreate the AWS lambda
+#
+echo 'Updating AWS log shipping lambda ...'
+./functionbeat -v -e -d "*" remove lambdalogshipper
+./functionbeat -v -e -d "*" deploy lambdalogshipper
+if [ $? -ne 0 ]; then
+  echo '*** Problem encountered creating functionbeat lambda in AWS'
+  exit
+fi

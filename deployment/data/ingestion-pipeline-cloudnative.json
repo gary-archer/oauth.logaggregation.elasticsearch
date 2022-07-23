@@ -1,23 +1,23 @@
 {
-    "description": "Ingest Pipeline for API Logs",
-    "processors": [
-      {
-        "drop": {
-          "if" : "ctx.apiName == null"
-        },
-        "script": {
-          "lang": "painless",
-          "description": "Use a client side unique id to prevent duplicates",
-          "source": "ctx._id = ctx.id"
-        },
-        "date" : {
-          "field" : "utcTime",
-          "formats" : ["ISO8601"]
-        },
-        "remove": {
-          "field": ["log", "stream", "utcTime"],
-          "ignore_missing": true
-        }
+  "description": "Ingest Pipeline for API Logs",
+  "processors": [
+    {
+      "drop": {
+        "if" : "ctx.apiName == null"
+      },
+      "script": {
+        "lang": "painless",
+        "description": "Use a client side unique id to prevent duplicates",
+        "source": "ctx._id = ctx.id"
+      },
+      "date" : {
+        "field" : "utcTime",
+        "formats" : ["ISO8601"]
+      },
+      "remove": {
+        "field": ["log", "stream", "utcTime"],
+        "ignore_missing": true
       }
-    ]
-  }
+    }
+  ]
+}

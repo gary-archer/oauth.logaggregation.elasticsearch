@@ -21,7 +21,7 @@ functionbeat.provider.aws.functions:
       - log_group_name: /aws/lambda/tokenhandler-dev-wildcard
 
     processors:
-      # Deserialize the message field from the Cloudfront log entry into an object
+      # Deserialize the bare JSON message field in the Cloudfront log entry into an object
       - decode_json_fields:
           fields: ["message"]
           process_array: false
@@ -36,14 +36,16 @@ setup.ilm.enabled: false
 setup.template.name: apilogs
 setup.template.pattern: apilogs-*
 
+# Drop fields that Functionbeat adds to logs by default
 processors:
   - drop_fields:
       fields: ['agent', 'ecs', 'host', 'input', 'version']
 
+# My managed Elasticsearch instance running in AWS
 output.elasticsearch:
   hosts: ["7839b30852c64538ba5682676d472abc.eu-west-1.aws.found.io:9243"]
   protocol: "https"
-  api_key: "id:apikey"
+  api_key: "$ELASTICSEARCH_API_KEY"
   index: "apilogs-%{+yyyy.MM.dd}"
   pipelines:
     - pipeline: apilogs
