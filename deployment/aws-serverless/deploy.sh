@@ -41,7 +41,7 @@ fi
 # Unpack resources
 #
 echo 'Unzipping functionbeat ...'
-tar xf "$FUNCTIONBEAT_FOLDER.tar.gz"
+tar xf "$FUNCTIONBEAT_FOLDER.tar.gz" 2>/dev/null
 if [ $? -ne 0 ]; then
   echo '*** Problem encountered unzipping functionbeat'
   exit
@@ -65,7 +65,7 @@ fi
 # Finally recreate the AWS lambda and use a name not greater than 11 characters 
 # https://github.com/elastic/beats/issues/30270
 #
-echo 'Updating AWS log shipping lambda ...'
+echo 'Uploading AWS logshipper lambda ...'
 ./functionbeat -v -e -d "*" remove logshipper
 ./functionbeat -v -e -d "*" deploy logshipper
 if [ $? -ne 0 ]; then

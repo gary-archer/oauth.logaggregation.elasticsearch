@@ -15,7 +15,7 @@
         "formats" : ["ISO8601"]
       },
       "remove": {
-        "field": ["log", "stream", "utcTime"],
+        "field": ["log", "stream"],
         "ignore_missing": true
       }
     }

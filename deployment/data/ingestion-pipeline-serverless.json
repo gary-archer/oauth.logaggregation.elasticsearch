@@ -15,7 +15,7 @@
         "formats" : ["ISO8601"]
       },
       "remove": {
-        "field": ["cloud", "event", "log_group", "log_stream", "message", "message_type", "owner", "subscription_filters", "utcTime"],
+        "field": ["cloud", "event", "log_group", "log_stream", "message", "message_type", "owner", "subscription_filters"],
         "ignore_missing": true
       }
     }
