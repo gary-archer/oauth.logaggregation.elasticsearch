@@ -47,7 +47,6 @@ if [ $? -ne 0 ]; then
   exit
 fi
 cd "$FUNCTIONBEAT_FOLDER"
-ls
 
 #
 # Update the configuration by replacing the functionbeat.yml file
