@@ -56,7 +56,10 @@ echo 'Updating functionbeat configuration ...'
 FUNCTIONBEAT_TEMPLATE_FILE='../../deployment/aws-serverless/functionbeat.8.3.2.template.yml'
 export ELASTICSEARCH_API_KEY
 envsubst < "$FUNCTIONBEAT_TEMPLATE_FILE" > functionbeat.yml
-cat functionbeat.yml
+if [ $? -ne 0 ]; then
+  echo '*** Problem encountered running the envsubst tool to update configuration'
+  exit
+fi
 
 #
 # Finally recreate the AWS lambda and use a name not greater than 11 characters 
