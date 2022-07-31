@@ -49,7 +49,7 @@ spec:
             - name: ELASTICSEARCH_PASSWORD
               value: 'Password1'
             - name: SERVER_PUBLICBASEURL
-              value: 'https://logs.mycompany.com'
+              value: 'https://logs.mycluster.com'
             - name: SERVER_SSL_ENABLED
               value: 'true'
             - name: SERVER_SSL_KEYSTORE_PATH
@@ -92,10 +92,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - logs.mycompany.com
-      secretName: mycompany-com-tls
+        - logs.mycluster.com
+      secretName: mycluster-com-tls
   rules:
-    - host: logs.mycompany.com
+    - host: logs.mycluster.com
       http:
         paths:
           - path: /
