@@ -28,7 +28,7 @@ spec:
             name: initdata-script
       initContainers:
         - name: wait-for-elasticsearch
-          image: appropriate/curl
+          image: job_utils:v1
           volumeMounts:
           - name: wait-script
             mountPath: /tmp/wait.sh
@@ -44,12 +44,12 @@ spec:
           command:
             # Wait for Elasticsearch to become ready
             [
-              "sh",
+              "bash",
               "/tmp/wait.sh"
             ]
       containers:
         - name: es-initdata-job
-          image: appropriate/curl
+          image: job_utils:v1
           volumeMounts:
           - name: schema-json
             mountPath: /tmp/schema.json
@@ -81,6 +81,6 @@ spec:
           command:
             # Initialize Elasticsearch data
             [
-              "sh",
+              "bash",
               "/tmp/initdata.sh"
             ]
