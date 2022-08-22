@@ -1,7 +1,0 @@
-#
-# A namespace for Elastic Stack components
-#
-kind: Namespace
-apiVersion: v1
-metadata:
-  name: elasticstack
