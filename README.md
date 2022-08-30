@@ -8,15 +8,13 @@ This is part of an overall [Effective API Logging](https://authguidance.com/effe
 The following notes describe a Docker based local development setup.\
 For an end-to-end Kubernetes example, run the [Cloud Native Deployment](https://github.com/gary-archer/oauth.cloudnative.deployment) instead.
 
-### Download SSL Certificates
+### Configure DNS and SSL
 
-First ensure that Docker is installed and run the following script first:
+On the first install, run the following script:
 
 ```bash
 ./deployment/docker-local/downloadcerts.sh
 ```
-
-### Configure DNS and SSL
 
 Add the External URL for Elasticsearch and Kibana to your hosts file:
 
