@@ -2,24 +2,19 @@
 ------------------------------------
 GET /_cat/indices
 
-2. Delete an index completely
------------------------------
-DELETE /apilogs*
-
-3. View Schema Definition
+2. View Schema Definition
 -------------------------
 GET apilogs*/_mappings
 
-4. Delete a Document by Id
---------------------------
-DELETE apilogs*/_doc/696265d4-16cf-4fab-9a56-a2a06f16cd46
-WRONG
-
-5. Get all documents in an index
+3. Get all documents in an index
 --------------------------------
 GET apilogs*/_search
 
-6. Delete all Documents in an Index
+4. Delete a daily index
+-----------------------
+DELETE /apilogs-2022.08.30
+
+5. Delete all Documents in an Index
 -----------------------------------
 POST apilogs*/_delete_by_query?conflicts=proceed
 {
@@ -27,7 +22,17 @@ POST apilogs*/_delete_by_query?conflicts=proceed
     "match_all": {}
   }
 }
-WRONG
+
+6. Delete a Document by ID
+--------------------------
+POST apilogs*/_delete_by_query
+{
+  "query": {
+    "match": {
+      "id": "c59addf2-8b82-1015-c34b-92b8dee2df9b"
+    }
+  }
+}
 
 7. Delete all Documents where a field is missing / null
 -------------------------------------------------------
@@ -43,21 +48,8 @@ POST apilogs*/_delete_by_query
     }
   }
 }
-WRONG
 
-8. Delete all entries for a specific match
-------------------------------------------
-POST apilogs*/_delete_by_query
-{
-  "query": {
-    "match": {
-      "sessionId": "cc24c3dd-9bda-7ebe-c941-062a93691e83"
-    }
-  }
-}
-WRONG
-
-9. Delete all entries older than a Time to Live
+8. Delete all entries older than a Time to Live
 -----------------------------------------------
 POST apilogs*/_delete_by_query
 {
@@ -69,25 +61,24 @@ POST apilogs*/_delete_by_query
     }
   }
 }
-WRONG
 
-10. Rename a Field
+9. Rename a Field
 ------------------
-Use update by query, to rename batchId to sessionId:
+Use update by query, to rename sessionId to batchId:
 
 POST apilogs*/_update_by_query
 {
   "query": {
     "missing": {
-      "field": "sessionId"
+      "field": "batchId"
     }
   },
   "script" : {
-    "inline": "ctx._source.sessionId = ctx._source.batchId; ctx._source.remove(\"batchId\");"
+    "inline": "ctx._source.batchId = ctx._source.sessionId; ctx._source.remove(\"sessionId\");"
     }
 }
 
-11. Delete a Field
+10. Delete a Field
 -------------------
 Use update by query:
 
@@ -98,13 +89,13 @@ POST apilogs*/_update_by_query
       "must": [
         {
           "exists": {
-            "field": "userId"
+            "field": "operationName"
           }
         }
       ]
     }
   },
   "script" : {
-    "inline": "ctx._source.remove(\"userId\");"
+    "inline": "ctx._source.remove(\"operationName\");"
     }
 }
