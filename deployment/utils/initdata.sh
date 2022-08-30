@@ -73,7 +73,7 @@ fi
 # Create the Elasticsearch schema for apilogs
 #
 echo 'Creating the Elasticsearch ingestion pipeline ...'
-HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_in_ingest/pipeline/apilogs" \
+HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_ingest/pipeline/apilogs" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H "content-type: application/json" \
 -d @"$INGESTION_PIPELINE_FILE_PATH" \
