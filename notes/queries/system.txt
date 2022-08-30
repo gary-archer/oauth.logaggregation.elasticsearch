@@ -69,12 +69,16 @@ Use update by query, to rename sessionId to batchId:
 POST apilogs*/_update_by_query
 {
   "query": {
-    "missing": {
-      "field": "batchId"
+    "bool": {
+      "must_not": {
+        "exists": {
+          "field": "batchId"
+        }
+      }
     }
   },
   "script" : {
-    "inline": "ctx._source.batchId = ctx._source.sessionId; ctx._source.remove(\"sessionId\");"
+    "source": "ctx._source.batchId = ctx._source.sessionId; ctx._source.remove(\"sessionId\");"
     }
 }
 
@@ -96,6 +100,6 @@ POST apilogs*/_update_by_query
     }
   },
   "script" : {
-    "inline": "ctx._source.remove(\"operationName\");"
+    "source": "ctx._source.remove(\"operationName\");"
     }
 }
