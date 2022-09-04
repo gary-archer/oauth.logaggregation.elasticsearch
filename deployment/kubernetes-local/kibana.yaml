@@ -92,7 +92,6 @@ spec:
   tls:
     - hosts:
         - logs.mycluster.com
-      secretName: mycluster-com-tls
   rules:
     - host: logs.mycluster.com
       http:
