@@ -50,14 +50,15 @@ This brings back the default result with information about the cluster:
 {
   "name" : "elasticsearch-internal.authsamples-dev.com",
   "cluster_name" : "docker-cluster",
-  "cluster_uuid" : "SqZtFqusQg-8ttuO6YSsEg",
+  "cluster_uuid" : "l295GnGkT86UA1NrqtbFXA",
   "version" : {
-    "number" : "8.3.2",
+    "number" : "8.4.1",
+    "build_flavor" : "default",
     "build_type" : "docker",
-    "build_hash" : "8b0b1f23fbebecc3c88e4464319dea8989f374fd",
-    "build_date" : "2022-07-06T15:15:15.901688194Z",
+    "build_hash" : "2bd229c8e56650b42e40992322a76e7914258f0c",
+    "build_date" : "2022-08-26T12:11:43.232597118Z",
     "build_snapshot" : false,
-    "lucene_version" : "9.2.0",
+    "lucene_version" : "9.3.0",
     "minimum_wire_compatibility_version" : "7.17.0",
     "minimum_index_compatibility_version" : "7.0.0"
   },
