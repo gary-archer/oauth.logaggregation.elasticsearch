@@ -1,0 +1,106 @@
+#
+# The Kubernetes resources for the Kibana UI
+#
+kind: Certificate
+apiVersion: cert-manager.io/v1
+metadata:
+  name: kibana-cert
+spec:
+  secretName: kibana-pkcs12
+  issuerRef:
+    name: ca-issuer
+    kind: Issuer
+  commonName: kibana-svc
+  dnsNames:
+  - kibana-svc
+  - kibana-svc.elasticstack.svc
+  - kibana-svc.elasticstack.svc.cluster.local
+  keystores:
+    pkcs12:
+      create: true
+      passwordSecretRef:
+        name: kibana-pkcs12-password
+        key: password
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: kibana
+  labels:
+    app: kibana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+        - name: kibana
+          image: docker.elastic.co/kibana/kibana:8.4.1
+          env:
+            - name: ELASTICSEARCH_HOSTS
+              value: 'https://elasticsearch-svc:9200'
+            - name: ELASTICSEARCH_USERNAME
+              value: 'kibana_system'
+            - name: ELASTICSEARCH_PASSWORD
+              value: 'Password1'
+            - name: SERVER_PUBLICBASEURL
+              value: 'https://logs.mycluster.com'
+            - name: SERVER_SSL_ENABLED
+              value: 'true'
+            - name: SERVER_SSL_KEYSTORE_PATH
+              value: '/usr/share/kibana/config/certs/keystore.p12'
+            - name: SERVER_SSL_KEYSTORE_PASSWORD
+              value: 'Password1'
+            - name: ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES
+              value: '/usr/share/kibana/config/certs/ca.crt'
+          ports:
+          - containerPort: 5601
+            name: kibana
+          volumeMounts:
+          - name: kibana-ssl-cert
+            mountPath: /usr/share/kibana/config/certs
+            readOnly: true
+      volumes:
+        - name: kibana-ssl-cert
+          secret:
+            secretName: kibana-pkcs12
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kibana-svc
+  annotations:
+    konghq.com/protocol: https
+spec:
+  selector:
+    app: kibana
+  ports:
+    - name: https
+      protocol: "TCP"
+      port: 5601
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: kibana-ingress
+spec:
+  ingressClassName: kong
+  tls:
+    - hosts:
+        - $KIBANA_DOMAIN_NAME
+  rules:
+    - host: $KIBANA_DOMAIN_NAME
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kibana-svc
+                port:
+                  name: https
