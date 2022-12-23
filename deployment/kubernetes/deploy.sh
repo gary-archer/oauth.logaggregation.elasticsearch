@@ -128,12 +128,12 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# Create a configmap to deploy the root certificate that filebeat must trust in order to call Elasticsearch over SSL
+# Create a secret to deploy the root certificate that filebeat must trust in order to call Elasticsearch over SSL
 #
-kubectl -n elasticstack delete configmap filebeat-root-cert 2>/dev/null
-kubectl -n elasticstack create configmap filebeat-root-cert --from-file=../../../certs/cluster.internal.ca.pem
+kubectl -n elasticstack delete secret filebeat-root-cert 2>/dev/null
+kubectl -n elasticstack create secret generic filebeat-root-cert --from-file=../../../certs/cluster.internal.ca.pem
 if [ $? -ne 0 ]; then
-  echo '*** Problem creating Filebeat SSL root CA configmap'
+  echo '*** Problem creating Filebeat SSL root CA secret'
   exit 1
 fi
 

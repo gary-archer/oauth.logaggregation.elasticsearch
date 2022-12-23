@@ -109,8 +109,8 @@ spec:
           defaultMode: 0640
           name: filebeat-config
       - name: root-cert
-        configMap:
-          name: filebeat-root-cert
+        secret:
+          secretName: filebeat-root-cert
       - name: varlibdockercontainers
         hostPath:
           path: /var/lib/docker/containers
