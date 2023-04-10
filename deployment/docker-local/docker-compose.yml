@@ -20,6 +20,7 @@ services:
       xpack.security.http.ssl.keystore.path: '/usr/share/elasticsearch/config/certs/authsamples-dev.ssl.p12'
       xpack.security.http.ssl.keystore.password: 'Password1'
       xpack.security.http.ssl.certificate_authorities: '/usr/share/elasticsearch/config/certs/authsamples-dev.ca.crt'
+      ES_JAVA_OPTS: -Xmx4g
       ELASTIC_PASSWORD: '${ELASTIC_PASSWORD}'
 
   #

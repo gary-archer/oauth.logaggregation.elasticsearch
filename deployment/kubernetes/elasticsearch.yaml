@@ -56,6 +56,8 @@ spec:
             value: 'Password1'
           - name: xpack.security.http.ssl.certificate_authorities
             value: '/usr/share/elasticsearch/config/certs/ca.crt'
+          - name: ES_JAVA_OPTS
+            value: -Xmx4g
           - name: ELASTIC_PASSWORD
             value: 'Password1'
         volumeMounts:
