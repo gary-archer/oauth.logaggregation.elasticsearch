@@ -140,7 +140,7 @@ fi
 if [ "$ENVIRONMENT_FOLDER" == "kubernetes-local" ]; then
 
   kubectl -n elasticstack delete -f ./ingress-kind.yaml 2>/dev/null
-  kubectl -n elasticstack apply  -f ./ingress-kind
+  kubectl -n elasticstack apply  -f ./ingress-kind.yaml
 fi
 if [ $? -ne 0 ]; then
   echo '*** Problem encountered deploying the Kibana ingress'
