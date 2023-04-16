@@ -9,7 +9,7 @@ spec:
   hosts:
   - logs.mycluster.com
   gateways:
-  - istio-ingress-gateway
+  - istio-system/istio-ingress-gateway
   http:
   - route:
     - destination:
