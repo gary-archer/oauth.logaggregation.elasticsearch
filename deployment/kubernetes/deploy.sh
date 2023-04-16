@@ -48,12 +48,12 @@ fi
 #
 # Enable Mutual TLS for all components
 #
-kubectl -n elasticstack delete -f ./mtls.yaml 2>/dev/null
-kubectl -n elasticstack apply  -f ./mtls.yaml
-if [ $? -ne 0 ]; then
-  echo '*** Problem encountered enabling peer authentication for the applications namespace'
-  exit 1
-fi
+#kubectl -n elasticstack delete -f ./mtls.yaml 2>/dev/null
+#kubectl -n elasticstack apply  -f ./mtls.yaml
+#if [ $? -ne 0 ]; then
+#  echo '*** Problem encountered enabling peer authentication for the applications namespace'
+#  exit 1
+#fi
 
 #
 # Trigger deployment of Elasticsearch to the Kubernetes cluster
