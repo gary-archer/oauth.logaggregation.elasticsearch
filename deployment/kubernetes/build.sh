@@ -19,16 +19,6 @@ else
 fi
 
 #
-# Create the elasticstack namespace
-#
-kubectl delete namespace elasticstack 2>/dev/null
-kubectl create namespace elasticstack
-if [ $? -ne 0 ]; then
-  echo '*** Problem encountered creating the elasticstack namespace'
-  exit 1
-fi
-
-#
 # Get the platform
 #
 case "$(uname -s)" in

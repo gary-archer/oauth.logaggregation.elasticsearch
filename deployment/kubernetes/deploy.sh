@@ -27,6 +27,35 @@ else
 fi
 
 #
+# Create the elasticstack namespace
+#
+kubectl delete namespace elasticstack 2>/dev/null
+kubectl create namespace elasticstack
+if [ $? -ne 0 ]; then
+  echo '*** Problem encountered creating the elasticstack namespace'
+  exit 1
+fi
+
+#
+# Enable sidecar injection for all components
+#
+kubectl label namespace elasticstack istio-injection=enabled --overwrite
+if [ $? -ne 0 ]; then
+  echo '*** Problem encountered enabling sidecar injection for the applications namespace'
+  exit 1
+fi
+
+#
+# Enable Mutual TLS for all components
+#
+kubectl -n elasticstack delete -f ./mtls.yaml 2>/dev/null
+kubectl -n elasticstack apply  -f ./mtls.yaml
+if [ $? -ne 0 ]; then
+  echo '*** Problem encountered enabling peer authentication for the applications namespace'
+  exit 1
+fi
+
+#
 # Trigger deployment of Elasticsearch to the Kubernetes cluster
 #
 kubectl -n elasticstack delete -f ./elasticsearch.yaml 2>/dev/null
@@ -102,6 +131,19 @@ kubectl -n elasticstack delete -f ./kibana.yaml 2>/dev/null
 kubectl -n elasticstack apply  -f ./kibana.yaml
 if [ $? -ne 0 ]; then
   echo '*** Problem encountered deploying Kibana'
+  exit 1
+fi
+
+#
+# Deploy the Kibana ingress
+#
+if [ "$ENVIRONMENT_FOLDER" == "kubernetes-local" ]; then
+
+  kubectl -n elasticstack delete -f ./ingress-kind.yaml 2>/dev/null
+  kubectl -n elasticstack apply  -f ./ingress-kind
+fi
+if [ $? -ne 0 ]; then
+  echo '*** Problem encountered deploying the Kibana ingress'
   exit 1
 fi
 
