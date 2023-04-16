@@ -1,5 +1,6 @@
 #
-# Downloaded and adapted from https://www.elastic.co/guide/en/beats/filebeat/current/running-on-kubernetes.html
+# Downloaded and adapted from the following online tutorial:
+# https://www.elastic.co/guide/en/beats/filebeat/current/running-on-kubernetes.html
 #
 apiVersion: v1
 kind: ConfigMap
@@ -19,14 +20,12 @@ data:
         add_error_key: false
 
     output.elasticsearch:
-      hosts: ['https://elasticsearch-svc:9200']
+      hosts: ['http://elasticsearch-svc:9200']
       username: elastic
       password: Password1
       index: "apilogs-%{+yyyy.MM.dd}"
       pipelines:
       - pipeline: apilogs
-      ssl:
-        certificate_authorities: ['/usr/share/filebeat/certs/ca.crt']
       
     setup:
       ilm:
@@ -99,18 +98,11 @@ spec:
         - name: varlog
           mountPath: /var/log
           readOnly: true
-        - name: root-cert
-          mountPath: /usr/share/filebeat/certs/ca.crt
-          readOnly: true
-          subPath: cluster.internal.ca.pem
       volumes:
       - name: config
         configMap:
           defaultMode: 0640
           name: filebeat-config
-      - name: root-cert
-        secret:
-          secretName: filebeat-root-cert
       - name: varlibdockercontainers
         hostPath:
           path: /var/lib/docker/containers
@@ -213,4 +205,3 @@ metadata:
   name: filebeat
   labels:
     k8s-app: filebeat
-

@@ -10,32 +10,20 @@
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 #
-# Manage environment specific differences and set up environment variables used by envsubst
+# Check prerequisites
 #
-if [ "$CLUSTER_TYPE" == 'local' ]; then
-  
-  export KIBANA_DOMAIN_NAME='logs.mycluster.com'
-  export ELASTICJOB_DOCKER_IMAGE='elasticjob:v1'
-
-else
-
-  if [ "$DOCKERHUB_ACCOUNT" == '' ]; then
-    echo '*** The DOCKERHUB_ACCOUNT environment variable has not been configured'
-    exit 1
-  fi
-
-  export KIBANA_DOMAIN_NAME='logs.authsamples-k8s.com'
-  export ELASTICJOB_DOCKER_IMAGE="$DOCKERHUB_ACCOUNT/elasticjob:v1"
+if [ "$ENVIRONMENT_FOLDER" == "" ]; then
+  echo '*** Environment variables neeed by the deploy API script have not been supplied'
+  exit 1
 fi
 
 #
-# Create a secret for the private key password of the Elasticsearch certificate that cert-manager will create
+# Support different docker repositories
 #
-kubectl -n elasticstack delete secret elasticsearch-pkcs12-password 2>/dev/null
-kubectl -n elasticstack create secret generic elasticsearch-pkcs12-password --from-literal=password='Password1'
-if [ $? -ne 0 ]; then
-  echo '*** Problem encountered creating the Elasticsearch certificate secret'
-  exit 1
+if [ "$DOCKER_REPOSITORY" == "" ]; then
+  export DOCKER_IMAGE='elasticjob:v1'
+else
+  export DOCKER_IMAGE="$DOCKER_REPOSITORY/elasticjob:v1"
 fi
 
 #
@@ -99,16 +87,6 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# Create a secret for the private key password of the Kibana certificate that cert-manager will create
-#
-kubectl -n elasticstack delete secret kibana-pkcs12-password 2>/dev/null
-kubectl -n elasticstack create secret generic kibana-pkcs12-password --from-literal=password='Password1'
-if [ $? -ne 0 ]; then
-  echo '*** Problem encountered creating the Kibana certificate secret'
-  exit 1
-fi
-
-#
 # Produce the final Kibana YAML using the envsubst tool
 #
 envsubst < ./kibana-template.yaml > ./kibana.yaml
@@ -124,16 +102,6 @@ kubectl -n elasticstack delete -f ./kibana.yaml 2>/dev/null
 kubectl -n elasticstack apply  -f ./kibana.yaml
 if [ $? -ne 0 ]; then
   echo '*** Problem encountered deploying Kibana'
-  exit 1
-fi
-
-#
-# Create a secret to deploy the root certificate that filebeat must trust in order to call Elasticsearch over SSL
-#
-kubectl -n elasticstack delete secret filebeat-root-cert 2>/dev/null
-kubectl -n elasticstack create secret generic filebeat-root-cert --from-file=../../../certs/cluster.internal.ca.pem
-if [ $? -ne 0 ]; then
-  echo '*** Problem creating Filebeat SSL root CA secret'
   exit 1
 fi
 

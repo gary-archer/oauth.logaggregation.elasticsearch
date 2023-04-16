@@ -10,19 +10,12 @@
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 #
-# Manage differences between local and cloud deployment
+# Support different docker repositories
 #
-if [ "$CLUSTER_TYPE" != 'local' ]; then
-  
-  if [ "$DOCKERHUB_ACCOUNT" == '' ]; then
-    echo '*** The DOCKERHUB_ACCOUNT environment variable has not been configured'
-    exit 1
-  fi
-
-  DOCKER_IMAGE_NAME="$DOCKERHUB_ACCOUNT/elasticjob:v1"
+if [ "$DOCKER_REPOSITORY" == "" ]; then
+  DOCKER_IMAGE='elasticjob:v1'
 else
-
-  DOCKER_IMAGE_NAME='elasticjob:v1'
+  DOCKER_IMAGE="$DOCKER_REPOSITORY/elasticjob:v1"
 fi
 
 #
@@ -64,7 +57,7 @@ fi
 #
 # Build a small Docker image containing curl and bash tools
 #
-docker build --no-cache -t "$DOCKER_IMAGE_NAME" .
+docker build --no-cache -t "$DOCKER_IMAGE" .
 if [ $? -ne 0 ]; then
   echo '*** Elastic job docker build problem encountered'
   exit 1
@@ -73,10 +66,10 @@ fi
 #
 # Push the docker image
 #
-if [ "$CLUSTER_TYPE" == 'local' ]; then
-  kind load docker-image "$DOCKER_IMAGE_NAME" --name oauth
+if [ "$DOCKER_REPOSITORY" == "" ]; then
+  kind load docker-image "$DOCKER_IMAGE" --name oauth
 else
-  docker image push "$DOCKER_IMAGE_NAME"
+  docker image push "$DOCKER_IMAGE"
 fi
 if [ $? -ne 0 ]; then
   echo '*** Elastic job docker push problem encountered'
