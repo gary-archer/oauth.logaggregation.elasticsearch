@@ -39,11 +39,11 @@ fi
 #
 # Enable sidecar injection for all components
 #
-kubectl label namespace elasticstack istio-injection=enabled --overwrite
-if [ $? -ne 0 ]; then
-  echo '*** Problem encountered enabling sidecar injection for the applications namespace'
-  exit 1
-fi
+#kubectl label namespace elasticstack istio-injection=enabled --overwrite
+#if [ $? -ne 0 ]; then
+#  echo '*** Problem encountered enabling sidecar injection for the applications namespace'
+#  exit 1
+#fi
 
 #
 # Enable Mutual TLS for all components
