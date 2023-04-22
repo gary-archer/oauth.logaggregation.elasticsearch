@@ -28,7 +28,7 @@ spec:
             name: initdata-script
       initContainers:
         - name: wait-for-elasticsearch
-          image: $ELASTICJOB_DOCKER_IMAGE
+          image: $DOCKER_IMAGE
           volumeMounts:
           - name: wait-script
             mountPath: /tmp/wait.sh
@@ -36,7 +36,7 @@ spec:
             readOnly: true
           env:
             - name: ELASTIC_URL
-              value: https://elasticsearch-svc:9200
+              value: http://elasticsearch-svc:9200
             - name: ELASTIC_USER
               value: elastic
             - name: ELASTIC_PASSWORD
@@ -49,7 +49,7 @@ spec:
             ]
       containers:
         - name: es-initdata-job
-          image: $ELASTICJOB_DOCKER_IMAGE
+          image: $DOCKER_IMAGE
           volumeMounts:
           - name: schema-json
             mountPath: /tmp/schema.json
@@ -65,7 +65,7 @@ spec:
             readOnly: true
           env:
             - name: ELASTIC_URL
-              value: https://elasticsearch-svc:9200
+              value: http://elasticsearch-svc:9200
             - name: ELASTIC_USER
               value: elastic
             - name: ELASTIC_PASSWORD

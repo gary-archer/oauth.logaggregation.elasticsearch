@@ -10,33 +10,50 @@
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 #
-# Manage environment specific differences and set up environment variables used by envsubst
+# Check prerequisites
 #
-if [ "$CLUSTER_TYPE" == 'local' ]; then
-  
-  export KIBANA_DOMAIN_NAME='logs.mycluster.com'
-  export ELASTICJOB_DOCKER_IMAGE='elasticjob:v1'
-
-else
-
-  if [ "$DOCKERHUB_ACCOUNT" == '' ]; then
-    echo '*** The DOCKERHUB_ACCOUNT environment variable has not been configured'
-    exit 1
-  fi
-
-  export KIBANA_DOMAIN_NAME='logs.authsamples-k8s.com'
-  export ELASTICJOB_DOCKER_IMAGE="$DOCKERHUB_ACCOUNT/elasticjob:v1"
-fi
-
-#
-# Create a secret for the private key password of the Elasticsearch certificate that cert-manager will create
-#
-kubectl -n elasticstack delete secret elasticsearch-pkcs12-password 2>/dev/null
-kubectl -n elasticstack create secret generic elasticsearch-pkcs12-password --from-literal=password='Password1'
-if [ $? -ne 0 ]; then
-  echo '*** Problem encountered creating the Elasticsearch certificate secret'
+if [ "$ENVIRONMENT_FOLDER" == "" ]; then
+  echo '*** Environment variables neeed by the deploy API script have not been supplied'
   exit 1
 fi
+
+#
+# Support different docker repositories
+#
+if [ "$DOCKER_REPOSITORY" == "" ]; then
+  export DOCKER_IMAGE='elasticjob:v1'
+else
+  export DOCKER_IMAGE="$DOCKER_REPOSITORY/elasticjob:v1"
+fi
+
+#
+# Create the elasticstack namespace
+#
+kubectl delete namespace elasticstack 2>/dev/null
+kubectl create namespace elasticstack
+if [ $? -ne 0 ]; then
+  echo '*** Problem encountered creating the elasticstack namespace'
+  exit 1
+fi
+
+#
+# Enable sidecar injection for all components
+#
+#kubectl label namespace elasticstack istio-injection=enabled --overwrite
+#if [ $? -ne 0 ]; then
+#  echo '*** Problem encountered enabling sidecar injection for the applications namespace'
+#  exit 1
+#fi
+
+#
+# Enable Mutual TLS for all components
+#
+#kubectl -n elasticstack delete -f ./mtls.yaml 2>/dev/null
+#kubectl -n elasticstack apply  -f ./mtls.yaml
+#if [ $? -ne 0 ]; then
+#  echo '*** Problem encountered enabling peer authentication for the applications namespace'
+#  exit 1
+#fi
 
 #
 # Trigger deployment of Elasticsearch to the Kubernetes cluster
@@ -99,16 +116,6 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# Create a secret for the private key password of the Kibana certificate that cert-manager will create
-#
-kubectl -n elasticstack delete secret kibana-pkcs12-password 2>/dev/null
-kubectl -n elasticstack create secret generic kibana-pkcs12-password --from-literal=password='Password1'
-if [ $? -ne 0 ]; then
-  echo '*** Problem encountered creating the Kibana certificate secret'
-  exit 1
-fi
-
-#
 # Produce the final Kibana YAML using the envsubst tool
 #
 envsubst < ./kibana-template.yaml > ./kibana.yaml
@@ -128,12 +135,15 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# Create a secret to deploy the root certificate that filebeat must trust in order to call Elasticsearch over SSL
+# Deploy the Kibana ingress
 #
-kubectl -n elasticstack delete secret filebeat-root-cert 2>/dev/null
-kubectl -n elasticstack create secret generic filebeat-root-cert --from-file=../../../certs/cluster.internal.ca.pem
+if [ "$ENVIRONMENT_FOLDER" == "kubernetes-local" ]; then
+
+  kubectl -n elasticstack delete -f ./ingress-kind.yaml 2>/dev/null
+  kubectl -n elasticstack apply  -f ./ingress-kind.yaml
+fi
 if [ $? -ne 0 ]; then
-  echo '*** Problem creating Filebeat SSL root CA secret'
+  echo '*** Problem encountered deploying the Kibana ingress'
   exit 1
 fi
 
