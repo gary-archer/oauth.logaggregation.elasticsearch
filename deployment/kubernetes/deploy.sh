@@ -117,11 +117,16 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# Produce the final Kibana YAML using the envsubst tool
+# Produce the final YAML using the envsubst tool
 #
 envsubst < ./kibana-template.yaml > ./kibana.yaml
 if [ $? -ne 0 ]; then
   echo '*** Problem encountered running envsubst to produce the final Kibana yaml file'
+  exit 1
+fi
+envsubst < ./ingress-template.yaml > ./ingress.yaml
+if [ $? -ne 0 ]; then
+  echo '*** Problem encountered running envsubst to produce the final ingress yaml file'
   exit 1
 fi
 
@@ -138,11 +143,8 @@ fi
 #
 # Deploy the Kibana ingress
 #
-if [ "$ENVIRONMENT_FOLDER" == "kubernetes-local" ]; then
-
-  kubectl -n elasticstack delete -f ./ingress-kind.yaml 2>/dev/null
-  kubectl -n elasticstack apply  -f ./ingress-kind.yaml
-fi
+kubectl -n elasticstack delete -f ./ingress.yaml 2>/dev/null
+kubectl -n elasticstack apply  -f ./ingress.yaml
 if [ $? -ne 0 ]; then
   echo '*** Problem encountered deploying the Kibana ingress'
   exit 1
