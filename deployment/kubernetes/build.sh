@@ -10,12 +10,14 @@
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 #
-# Support different docker repositories
+# Use a timestamp based tag and support both KIND and DockerHub repositories
 #
+TAG=$(date +%Y%m%d%H%M%S)
+echo $TAG > ./dockertag.txt
 if [ "$DOCKER_REPOSITORY" == "" ]; then
-  DOCKER_IMAGE='elasticjob:v1'
+  DOCKER_IMAGE="elasticjob:$TAG"
 else
-  DOCKER_IMAGE="$DOCKER_REPOSITORY/elasticjob:v1"
+  DOCKER_IMAGE="$DOCKER_REPOSITORY/elasticjob:$TAG"
 fi
 
 #
