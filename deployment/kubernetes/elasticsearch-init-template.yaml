@@ -60,7 +60,6 @@ spec:
             - name: INGESTION_PIPELINE_FILE_PATH
               value: /tmp/ingestion-pipeline-cloudnative.json
           command:
-            # Initialize Elasticsearch data
             [
               "bash",
               "/tmp/initdata.sh"
