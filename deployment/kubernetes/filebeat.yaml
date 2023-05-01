@@ -53,6 +53,7 @@ spec:
       labels:
         k8s-app: filebeat
     spec:
+      serviceAccountName: filebeat
       containers:
       - name: filebeat
         image: docker.elastic.co/beats/filebeat:8.7.0
@@ -111,3 +112,10 @@ spec:
         hostPath:
           path: /var/lib/filebeat-data
           type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: filebeat
+  labels:
+    k8s-app: filebeat
