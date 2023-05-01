@@ -42,7 +42,6 @@ esac
 # On Windows, fix problems with trailing newline characters in Docker scripts downloaded from Git
 #
 if [ "$PLATFORM" == 'WINDOWS' ]; then
-  sed -i 's/\r$//' ../shared/wait.sh
   sed -i 's/\r$//' ../shared/initdata.sh
 fi
 
