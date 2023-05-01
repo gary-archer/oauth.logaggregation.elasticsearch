@@ -20,9 +20,6 @@ spec:
         - name: ingestion-json
           configMap:
             name: ingestion-json
-        - name: wait-script
-          configMap:
-            name: wait-script
         - name: initdata-script
           configMap:
             name: initdata-script
