@@ -153,9 +153,9 @@ fi
 #
 # Trigger deployment of Filebeat components to the Kubernetes cluster
 #
-kubectl -n elasticstack delete -f ./filebeat.yaml 2>/dev/null
-kubectl -n elasticstack apply  -f ./filebeat.yaml
-if [ $? -ne 0 ]; then
-  echo '*** Problem encountered deploying Kibana'
-  exit 1
-fi
+#kubectl -n elasticstack delete -f ./filebeat.yaml 2>/dev/null
+#kubectl -n elasticstack apply  -f ./filebeat.yaml
+#if [ $? -ne 0 ]; then
+#  echo '*** Problem encountered deploying Kibana'
+#  exit 1
+#fi

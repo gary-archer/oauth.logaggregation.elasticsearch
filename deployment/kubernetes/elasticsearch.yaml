@@ -29,8 +29,6 @@ spec:
             value: 'true'
           - name: xpack.security.http.ssl.enabled
             value: 'false'
-          - name: xpack.security.http.ssl.keystore.password
-            value: 'Password1'
           - name: ES_JAVA_OPTS
             value: -Xmx4g
           - name: ELASTIC_PASSWORD
@@ -46,3 +44,4 @@ spec:
   ports:
     - protocol: "TCP"
       port: 9200
+
