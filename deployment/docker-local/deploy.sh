@@ -79,14 +79,6 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# Run the wait script, to ensure that Elasticsearch is available
-#
-../shared/wait.sh
-if [ $? -ne 0 ]; then
-  exit 1
-fi
-
-#
 # Run the script to create the initial Elasticsearch data
 #
 ../shared/initdata.sh

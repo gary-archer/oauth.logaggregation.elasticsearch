@@ -83,13 +83,6 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-kubectl -n elasticstack delete configmap wait-script 2>/dev/null
-kubectl -n elasticstack create configmap wait-script --from-file=../shared/wait.sh
-if [ $? -ne 0 ]; then
-  echo '*** Problem encountered creating the config map for the Elasticsearch wait script'
-  exit 1
-fi
-
 kubectl -n elasticstack delete configmap initdata-script 2>/dev/null
 kubectl -n elasticstack create configmap initdata-script --from-file=../shared/initdata.sh
 if [ $? -ne 0 ]; then

@@ -20,33 +20,9 @@ spec:
         - name: ingestion-json
           configMap:
             name: ingestion-json
-        - name: wait-script
-          configMap:
-            name: wait-script
         - name: initdata-script
           configMap:
             name: initdata-script
-      initContainers:
-        - name: wait-for-elasticsearch
-          image: $DOCKER_IMAGE
-          volumeMounts:
-          - name: wait-script
-            mountPath: /tmp/wait.sh
-            subPath: wait.sh
-            readOnly: true
-          env:
-            - name: ELASTIC_URL
-              value: http://elasticsearch-svc:9200
-            - name: ELASTIC_USER
-              value: elastic
-            - name: ELASTIC_PASSWORD
-              value: Password1
-          command:
-            # Wait for Elasticsearch to become ready
-            [
-              "bash",
-              "/tmp/wait.sh"
-            ]
       containers:
         - name: es-initdata-job
           image: $DOCKER_IMAGE
@@ -64,6 +40,8 @@ spec:
             subPath: initdata.sh
             readOnly: true
           env:
+            - name: IS_ISTIO
+              value: 'true'
             - name: ELASTIC_URL
               value: http://elasticsearch-svc:9200
             - name: ELASTIC_USER
@@ -79,7 +57,6 @@ spec:
             - name: INGESTION_PIPELINE_FILE_PATH
               value: /tmp/ingestion-pipeline-cloudnative.json
           command:
-            # Initialize Elasticsearch data
             [
               "bash",
               "/tmp/initdata.sh"
