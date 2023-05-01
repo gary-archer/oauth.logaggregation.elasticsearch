@@ -61,9 +61,7 @@ spec:
           "-e",
         ]
         securityContext:
-          runAsUser: 0
-          #capabilities:
-          #  add: ["NET_ADMIN"]
+          runAsUser: 1000
         env:
         - name: ELASTICSEARCH_HOST
           value: elasticsearch-svc
