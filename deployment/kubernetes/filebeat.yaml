@@ -1,5 +1,5 @@
 #
-# Downloaded and adapted from the following online tutorial:
+# Filebeat runs as root in order to successfully read node level log files
 # https://raw.githubusercontent.com/elastic/beats/8.7/deploy/kubernetes/filebeat-kubernetes.yaml
 #
 kind: ConfigMap
@@ -60,8 +60,8 @@ spec:
           "-c", "/etc/filebeat.yml",
           "-e",
         ]
-        #securityContext:
-        #  runAsUser: 0
+        securityContext:
+          runAsUser: 0
         env:
         - name: ELASTICSEARCH_HOST
           value: elasticsearch-svc
