@@ -1,9 +1,9 @@
 #
 # Downloaded and adapted from the following online tutorial:
-# https://www.elastic.co/guide/en/beats/filebeat/current/running-on-kubernetes.html
+# https://raw.githubusercontent.com/elastic/beats/8.7/deploy/kubernetes/filebeat-kubernetes.yaml
 #
-apiVersion: v1
 kind: ConfigMap
+apiVersion: v1
 metadata:
   name: filebeat-config
   labels:
@@ -38,8 +38,8 @@ data:
     - drop_fields:
         fields: ['agent', 'ecs', 'host', 'input', 'version']
 ---
-apiVersion: apps/v1
 kind: DaemonSet
+apiVersion: apps/v1
 metadata:
   name: filebeat
   labels:
@@ -53,10 +53,6 @@ spec:
       labels:
         k8s-app: filebeat
     spec:
-      serviceAccountName: filebeat
-      terminationGracePeriodSeconds: 30
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: filebeat
         image: docker.elastic.co/beats/filebeat:8.7.0
@@ -64,6 +60,10 @@ spec:
           "-c", "/etc/filebeat.yml",
           "-e",
         ]
+        securityContext:
+          runAsUser: 0
+          capabilities:
+            add: ["NET_ADMIN"]
         env:
         - name: ELASTICSEARCH_HOST
           value: elasticsearch-svc
@@ -77,8 +77,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        securityContext:
-          runAsUser: 0
         resources:
           limits:
             memory: 200Mi
@@ -113,95 +111,3 @@ spec:
         hostPath:
           path: /var/lib/filebeat-data
           type: DirectoryOrCreate
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: filebeat
-subjects:
-- kind: ServiceAccount
-  name: filebeat
-  namespace: kube-system
-roleRef:
-  kind: ClusterRole
-  name: filebeat
-  apiGroup: rbac.authorization.k8s.io
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: filebeat
-subjects:
-  - kind: ServiceAccount
-    name: filebeat
-roleRef:
-  kind: Role
-  name: filebeat
-  apiGroup: rbac.authorization.k8s.io
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: filebeat-kubeadm-config
-subjects:
-  - kind: ServiceAccount
-    name: filebeat
-roleRef:
-  kind: Role
-  name: filebeat-kubeadm-config
-  apiGroup: rbac.authorization.k8s.io
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: filebeat
-  labels:
-    k8s-app: filebeat
-rules:
-- apiGroups: [""]
-  resources:
-  - namespaces
-  - pods
-  - nodes
-  verbs:
-  - get
-  - watch
-  - list
-- apiGroups: ["apps"]
-  resources:
-    - replicasets
-  verbs: ["get", "list", "watch"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: filebeat
-  labels:
-    k8s-app: filebeat
-rules:
-  - apiGroups:
-      - coordination.k8s.io
-    resources:
-      - leases
-    verbs: ["get", "create", "update"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: filebeat-kubeadm-config
-  labels:
-    k8s-app: filebeat
-rules:
-  - apiGroups: [""]
-    resources:
-      - configmaps
-    resourceNames:
-      - kubeadm-config
-    verbs: ["get"]
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: filebeat
-  labels:
-    k8s-app: filebeat
