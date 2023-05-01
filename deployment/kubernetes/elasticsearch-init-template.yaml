@@ -44,7 +44,7 @@ spec:
             readOnly: true
           env:
             - name: IS_ISTIO
-              value: true
+              value: 'true'
             - name: ELASTIC_URL
               value: http://elasticsearch-svc:9200
             - name: ELASTIC_USER
