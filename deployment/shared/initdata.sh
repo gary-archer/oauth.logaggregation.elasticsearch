@@ -50,7 +50,7 @@ if [ "$IS_ISTIO" == 'true' ]; then
 fi
 
 #
-# Also wait util Elasticsearch is ready
+# Also wait until Elasticsearch is ready
 #
 echo 'Waiting for Elasticsearch endpoints to become available ...'
 while [ "$(curl -k -s -o /dev/null -w ''%{http_code}'' "$ELASTIC_URL" -u "$ELASTIC_USER:$ELASTIC_PASSWORD")" != '200' ]; do
@@ -89,7 +89,7 @@ if [ "$HTTP_STATUS" != '200' ]; then
 fi
 
 #
-# Create the Elasticsearch schema for apilogs
+# Create the Elasticsearch ingestion pipeline for apilogs
 #
 echo 'Creating the Elasticsearch ingestion pipeline ...'
 HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_ingest/pipeline/apilogs" \
