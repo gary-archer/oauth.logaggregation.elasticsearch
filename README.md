@@ -1,8 +1,7 @@
 # Elasticsearch Log Aggregation
 
-Resources for a demo deployment of the Elastic Stack so that it can be used for API log aggregation.\
-This is part of an overall [Effective API Logging](https://authguidance.com/effective-api-logging/) design.\
-Deployment resources can be used in Docker and Kubernetes deployments.
+Resources for demo level deployments of the Elastic Stack, to be used for API log aggregation.\
+This is part of an overall [Effective API Logging](https://authguidance.com/effective-api-logging/) design.
 
 ## Docker Commands
 
