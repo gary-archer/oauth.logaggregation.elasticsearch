@@ -35,12 +35,12 @@ Run the following command to deploy Docker components for Elasticsearch, Kibana 
 ./deployment/docker-local/deploy.sh
 ```
 
-The script will wait for completion and open Kibana in the system browser.`
-Login with a username of `elastic` and a password of `Password1`.
+The script will wait for completion and open Kibana in the system browser.\
+Login with a username of `elastic` and a password of `Password1`, then query API logs:
 
 ![kibana application](images/kibana.png)
 
 ## Further Information
 
-See the [Elasticsearch Log Aggregation Setup](https://authguidance.com/log-aggregation-setup/) blog post for further information.\
-This includes details on how to run APIs and clients to create log entries.
+- See the [Elasticsearch Log Aggregation Setup](https://authguidance.com/log-aggregation-setup/) for details on how to run APIs and test clients
+- See [API Platform Technical Support Analysis](https://authguidance.com/api-technical-support-analysis/) for some example queries on API logs
