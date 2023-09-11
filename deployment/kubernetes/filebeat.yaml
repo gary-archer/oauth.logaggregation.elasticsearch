@@ -1,0 +1,111 @@
+#
+# Filebeat runs as root in order to successfully read node level log files
+# https://raw.githubusercontent.com/elastic/beats/8.7/deploy/kubernetes/filebeat-kubernetes.yaml
+#
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: filebeat-config
+  labels:
+    k8s-app: filebeat
+data:
+  filebeat.yml: |-
+    filebeat.inputs:
+    - type: container
+      paths:
+        - /var/log/containers/finalapi*.log
+        - /var/log/containers/oauthagent*.log
+      json:
+        keys_under_root: true
+        add_error_key: false
+
+    output.elasticsearch:
+      hosts: ['http://elasticsearch-svc:9200']
+      username: elastic
+      password: Password1
+      index: "apilogs-%{+yyyy.MM.dd}"
+      pipelines:
+      - pipeline: apilogs
+      
+    setup:
+      ilm:
+        enabled: false
+      template:
+        name: apilogs
+        pattern: apilogs-*
+
+    processors:
+    - drop_fields:
+        fields: ['agent', 'ecs', 'host', 'input', 'version']
+---
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: filebeat
+  labels:
+    k8s-app: filebeat
+spec:
+  selector:
+    matchLabels:
+      k8s-app: filebeat
+  template:
+    metadata:
+      labels:
+        k8s-app: filebeat
+    spec:
+      containers:
+      - name: filebeat
+        image: docker.elastic.co/beats/filebeat:8.8.2
+        args: [
+          "-c", "/etc/filebeat.yml",
+          "-e",
+        ]
+        securityContext:
+          runAsUser: 0
+        env:
+        - name: ELASTICSEARCH_HOST
+          value: elasticsearch-svc
+        - name: ELASTICSEARCH_PORT
+          value: "9200"
+        - name: ELASTICSEARCH_USERNAME
+          value: elastic
+        - name: ELASTICSEARCH_PASSWORD
+          value: Password1
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        volumeMounts:
+        - name: config
+          mountPath: /etc/filebeat.yml
+          readOnly: true
+          subPath: filebeat.yml
+        - name: data
+          mountPath: /usr/share/filebeat/data
+        - name: varlibdockercontainers
+          mountPath: /var/lib/docker/containers
+          readOnly: true
+        - name: varlog
+          mountPath: /var/log
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          defaultMode: 0640
+          name: filebeat-config
+      - name: varlibdockercontainers
+        hostPath:
+          path: /var/lib/docker/containers
+      - name: varlog
+        hostPath:
+          path: /var/log
+      - name: data
+        hostPath:
+          path: /var/lib/filebeat-data
+          type: DirectoryOrCreate

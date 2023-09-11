@@ -1,0 +1,48 @@
+#
+# The Kubernetes resources for the Kibana UI
+#
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: kibana
+  labels:
+    app: kibana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+        - name: kibana
+          image: docker.elastic.co/kibana/kibana:8.8.2
+          env:
+            - name: ELASTICSEARCH_HOSTS
+              value: 'http://elasticsearch-svc:9200'
+            - name: ELASTICSEARCH_USERNAME
+              value: 'kibana_system'
+            - name: ELASTICSEARCH_PASSWORD
+              value: 'Password1'
+            - name: SERVER_PUBLICBASEURL
+              value: 'https://logs.mycluster.com'
+            - name: SERVER_SSL_ENABLED
+              value: 'false'
+          ports:
+          - containerPort: 5601
+            name: kibana
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kibana-svc
+spec:
+  selector:
+    app: kibana
+  ports:
+    - name: http
+      protocol: "TCP"
+      port: 5601
