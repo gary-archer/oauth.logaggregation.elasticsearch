@@ -2,6 +2,11 @@
 # Filebeat runs as root in order to successfully read node level log files
 # https://raw.githubusercontent.com/elastic/beats/8.7/deploy/kubernetes/filebeat-kubernetes.yaml
 #
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: filebeat
+---
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -52,7 +57,11 @@ spec:
     metadata:
       labels:
         k8s-app: filebeat
+        spiffe.io/spire-managed-identity: 'true'
+      annotations:
+        inject.istio.io/templates: 'sidecar,spire'
     spec:
+      serviceAccountName: filebeat
       containers:
       - name: filebeat
         image: docker.elastic.co/beats/filebeat:8.10.1
