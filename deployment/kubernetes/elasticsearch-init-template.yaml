@@ -1,6 +1,11 @@
 #
 # Initialize Elastic with a schema and with an ingest pipeline for our API logs
 #
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: es-initdata-job
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -10,8 +15,13 @@ spec:
   completions: 1
   template:
     metadata:
-      name: es-initdata-job
+      labels:
+        app: es-initdata-job
+        spiffe.io/spire-managed-identity: 'true'
+      annotations:
+        inject.istio.io/templates: 'sidecar,spire'
     spec:
+      serviceAccountName: es-initdata-job
       restartPolicy: Never
       volumes:
         - name: schema-json

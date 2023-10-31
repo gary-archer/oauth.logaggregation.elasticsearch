@@ -1,6 +1,11 @@
 #
 # The Kubernetes resources for the Kibana UI
 #
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kibana
+---
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -16,7 +21,11 @@ spec:
     metadata:
       labels:
         app: kibana
+        spiffe.io/spire-managed-identity: 'true'
+      annotations:
+        inject.istio.io/templates: 'sidecar,spire'
     spec:
+      serviceAccountName: kibana
       containers:
         - name: kibana
           image: docker.elastic.co/kibana/kibana:8.10.1
