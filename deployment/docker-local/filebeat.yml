@@ -1,0 +1,26 @@
+filebeat.inputs:
+- type: log
+  paths:
+  - /var/log/api/*.log
+  json:
+    keys_under_root: true
+    add_error_key: false
+
+output.elasticsearch:
+  hosts: ['http://elasticsearch-internal.authsamples-dev.com:9200']
+  username: elastic
+  password: Password1
+  index: "apilogs-%{+yyyy.MM.dd}"
+  pipelines:
+  - pipeline: apilogs
+
+setup:
+  ilm:
+    enabled: false
+  template:
+    name: apilogs
+    pattern: apilogs-*
+
+processors:
+- drop_fields:
+    fields: ['agent', 'ecs', 'host', 'input', 'version']
