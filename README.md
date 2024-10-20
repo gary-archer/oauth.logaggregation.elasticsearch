@@ -1,7 +1,7 @@
 # Elasticsearch Log Aggregation
 
 Resources for demo level deployments of the Elastic Stack, used for API log aggregation.\
-This is part of an overall [Effective API Logging](https://authguidance.com/effective-api-logging/) design.
+This is part of an overall [Effective API Logging](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/effective-api-logging.mdx) design.
 
 ## Docker Commands
 
@@ -21,7 +21,7 @@ Download SSL development certificates:
 ./deployment/docker-local/downloadcerts.sh
 ```
 
-Next configure [Browser SSL Trust](https://apisandclients.com/posts/developer-ssl-setup#trust-a-root-certificate-in-browsers) for the SSL root certificate:
+Next configure [Browser SSL Trust](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/developer-ssl-setup.mdx#trust-a-root-certificate-in-browsers) for the SSL root certificate:
 
 ```text
 ./deployment/docker-local/certs/authsamples-dev.ca.crt
@@ -42,5 +42,5 @@ Sign in with a username of `elastic` and a password of `Password1`, then query A
 
 ## Further Information
 
-- See the [Elasticsearch Log Aggregation Setup](https://authguidance.com/log-aggregation-setup/) for details on how to run APIs and test clients.
-- See [API Platform Technical Support Analysis](https://authguidance.com/api-technical-support-analysis/) for some example queries on API logs.
+- See the [Elasticsearch Log Aggregation Setup](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/log-aggregation-setup.mdx) for details on how to run APIs and test clients.
+- See [API Platform Technical Support Analysis](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/api-technical-support-analysis.mdx) for some example queries on API logs.
