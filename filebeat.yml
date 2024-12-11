@@ -7,7 +7,7 @@ filebeat.inputs:
     add_error_key: false
 
 output.elasticsearch:
-  hosts: ['http://elasticsearch-internal.authsamples-dev.com:9200']
+  hosts: ['http://elasticsearch-internal:9200']
   username: elastic
   password: Password1
   index: "apilogs-%{+yyyy.MM.dd}"

@@ -18,13 +18,13 @@ Configure DNS by adding the logs domain name to your hosts file:
 Download SSL development certificates:
 
 ```bash
-./deployment/docker-local/downloadcerts.sh
+./downloadcerts.sh
 ```
 
 Next configure [Browser SSL Trust](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/developer-ssl-setup.mdx#trust-a-root-certificate-in-browsers) for the SSL root certificate:
 
 ```text
-./deployment/docker-local/certs/authsamples-dev.ca.crt
+./certs/authsamples-dev.ca.crt
 ```
 
 ### Deploy the System
@@ -32,13 +32,19 @@ Next configure [Browser SSL Trust](https://github.com/gary-archer/oauth.blog/tre
 Run the following command to deploy Docker components for Elasticsearch, Kibana and Filebeat:
 
 ```bash
-./deployment/docker-local/deploy.sh
+./deploy.sh
 ```
 
 The script waits for completion and then opens Kibana in the system browser.\
-Sign in with a username of `elastic` and a password of `Password1`, then query API logs:
+Sign in with a username of `elastic` and a password of `Password1`, then query API logs.
 
-![kibana application](doc/kibana.png)
+### Free Resources
+
+Run the following command to free Docker resources:
+
+```bash
+./teardown.sh
+```
 
 ## Further Information
 

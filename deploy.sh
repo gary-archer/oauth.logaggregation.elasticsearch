@@ -18,7 +18,7 @@ fi
 #
 # Build a small Docker image containing curl and bash tools
 #
-docker build --no-cache -f ../shared/Dockerfile -t elasticjob:latest .
+docker build --no-cache -t elasticjob:latest .
 if [ $? -ne 0 ]; then
   echo '*** Elastic job docker build problem encountered'
   exit 1
