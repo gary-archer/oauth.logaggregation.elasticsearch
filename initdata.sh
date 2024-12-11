@@ -39,17 +39,6 @@ if [ "$INGESTION_PIPELINE_FILE_PATH" == '' ]; then
 fi
 
 #
-# If running in Istio we must check the sidecar is ready, in order to connect via mTLS
-#
-if [ "$IS_ISTIO" == 'true' ]; then
-
-  echo 'Waiting for the Istio sidecar to become available ...'
-  while [ "$(curl -s -o /dev/null -w ''%{http_code}'' "http://localhost:15021/healthz/ready")" != '200' ]; do
-    sleep 2
-  done
-fi
-
-#
 # Also wait until Elasticsearch is ready
 #
 echo 'Waiting for Elasticsearch endpoints to become available ...'
@@ -101,12 +90,4 @@ HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_ingest/pipeline/apilogs" \
 if [ "$HTTP_STATUS" != '200' ]; then
   echo "*** Problem encountered creating the apilogs ingestion pipeline: $HTTP_STATUS"
   exit 1
-fi
-
-#
-# If running in Istio, terminate the sidecar upon exit
-#
-if [ "$IS_ISTIO" == 'true' ]; then
-  echo 'Quitting the sidecar container ...'
-  curl -i -X POST http://localhost:15020/quitquitquit
 fi

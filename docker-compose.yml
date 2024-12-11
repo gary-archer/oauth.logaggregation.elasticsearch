@@ -4,8 +4,8 @@ services:
   # The API gateway exposes Kibana at an external HTTPS URL
   #
   apigateway:
-    image: apigateway:latest
-    hostname: apigateway-internal.authsamples-dev.com
+    image: kong/kong:3.8-ubuntu
+    hostname: apigateway-internal
     ports:
       - 443:8000
     volumes:
@@ -26,7 +26,7 @@ services:
   #
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
-    hostname: elasticsearch-internal.authsamples-dev.com
+    hostname: elasticsearch-internal
     environment:
       discovery.type: 'single-node'
       xpack.security.enabled: 'true'
@@ -40,7 +40,7 @@ services:
   #
   kibana:
     image: docker.elastic.co/kibana/kibana:8.15.0
-    hostname: kibana-internal.authsamples-dev.com
+    hostname: kibana-internal
     ports:
       - 5601:5601
     environment:
@@ -59,10 +59,10 @@ services:
   filebeat:
     image: docker.elastic.co/beats/filebeat:8.15.0
     command: filebeat -e -strict.perms=false
-    hostname: filebeat-internal.authsamples-dev.com
+    hostname: filebeat-internal
     volumes:
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
-      - ../../../oauth.apisample.nodejs/logs:/var/log/api
+      - ../oauth.apisample.nodejs/logs:/var/log/api
     environment:
       ELASTICSEARCH_USERNAME: 'elastic'
       ELASTICSEARCH_PASSWORD: 'Password1'
@@ -74,11 +74,11 @@ services:
     image: elasticjob:latest
     command: /tmp/initdata.sh
     volumes:
-      - ../shared/initdata.sh:/tmp/initdata.sh
-      - ../data/schema.json:/tmp/schema.json
-      - ../data/ingestion-pipeline-cloudnative.json:/tmp/ingestion-pipeline-cloudnative.json
+      - ./initdata.sh:/tmp/initdata.sh
+      - ./data/schema.json:/tmp/schema.json
+      - ./data/ingestion-pipeline-cloudnative.json:/tmp/ingestion-pipeline-cloudnative.json
     environment:
-      ELASTIC_URL: 'http://elasticsearch-internal.authsamples-dev.com:9200'
+      ELASTIC_URL: 'http://elasticsearch-internal:9200'
       ELASTIC_USER: 'elastic'
       ELASTIC_PASSWORD: 'Password1'
       KIBANA_SYSTEM_USER: 'kibana_system'

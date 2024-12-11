@@ -3,7 +3,7 @@ _transform: true
 
 services:
 - name: kibana
-  url: http://kibana-internal.authsamples-dev.com:5601
+  url: http://kibana-internal.com:5601
   routes:
   - name: kibana-route
     hosts:
