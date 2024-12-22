@@ -8,9 +8,9 @@
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 #
-# Download development SSL certificates if required
+# Create SSL development certificates if required
 #
-./downloadcerts.sh
+./certs/create.sh
 if [ $? -ne 0 ]; then
   exit 1
 fi

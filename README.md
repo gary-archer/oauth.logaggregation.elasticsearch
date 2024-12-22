@@ -9,19 +9,21 @@ First ensure that a Docker engine is installed.
 
 ### Configure DNS and SSL
 
-Configure DNS by adding the logs domain name to your hosts file:
+Configure custom development domains by adding this DNS entry to your hosts file:
 
-```text
+```bash
 127.0.0.1 localhost logs.authsamples-dev.com
 ```
 
-Download SSL development certificates:
+Install OpenSSL if required, then create a folder in which to create development certificates for the SPA:
 
 ```bash
-./downloadcerts.sh
+export SECRETS_FOLDER='~/secrets'
+mkdir ~/secrets
+./certs/create.sh
 ```
 
-Next configure [Browser SSL Trust](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/developer-ssl-setup.mdx#trust-a-root-certificate-in-browsers) for the SSL root certificate:
+Finally, configure [Browser SSL Trust](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/developer-ssl-setup.mdx#trust-a-root-certificate-in-browsers) for the SSL root certificate at this location:
 
 ```text
 ./certs/authsamples-dev.ca.crt
