@@ -1,6 +1,6 @@
-# Elasticsearch Log Aggregation
+# OAuth Elasticsearch Log Aggregation
 
-Resources for demo level deployments of the Elastic Stack, used for API log aggregation.\
+Resources for demo level deployments of the Elastic Stack, used for OAuth and API log aggregation.\
 This is part of an overall [Effective API Logging](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/effective-api-logging.mdx) design.
 
 ## Docker Commands
