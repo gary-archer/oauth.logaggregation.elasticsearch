@@ -23,7 +23,7 @@ mkdir -p "$SECRETS_FOLDER"
 ./certs/create.sh
 ```
 
-Finally, configure [Browser SSL Trust](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/developer-ssl-setup.mdx#trust-a-root-certificate-in-browsers) for the SSL root certificate at this location:
+Then configure [Browser SSL Trust](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/developer-ssl-setup.mdx#trust-a-root-certificate-in-browsers) for the SSL root certificate at this location:
 
 ```text
 ./certs/authsamples-dev.ca.crt
