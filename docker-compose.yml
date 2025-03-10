@@ -36,6 +36,25 @@ services:
       ELASTIC_PASSWORD: 'Password1'
 
   #
+  # An init container used to initialize Elasticseach data and set the Kibana user account
+  #
+  elasticsearch-init-job:
+    image: elasticjob:latest
+    volumes:
+      - ./initdata.sh:/usr/job/initdata.sh
+      - ./index-template.json:/usr/job/index-template.json
+      - ./ingestion-pipeline.json:/usr/job/ingestion-pipeline.json
+    environment:
+      ELASTIC_URL: 'http://elasticsearch-internal:9200'
+      ELASTIC_USER: 'elastic'
+      ELASTIC_PASSWORD: 'Password1'
+      KIBANA_SYSTEM_USER: 'kibana_system'
+      KIBANA_PASSWORD: 'Password1'
+    depends_on:
+      elasticsearch:
+        condition: service_started
+
+  #
   # Deploy Kibana with a dummy user account different to 'elastic', to prevent startup failures
   #
   kibana:
@@ -66,25 +85,6 @@ services:
     environment:
       ELASTICSEARCH_USERNAME: 'elastic'
       ELASTICSEARCH_PASSWORD: 'Password1'
-
-  #
-  # An init container used to initialize Elasticseach data and set the Kibana user account
-  #
-  elasticsearch-init:
-    image: elasticjob:latest
-    command: /tmp/initdata.sh
-    volumes:
-      - ./initdata.sh:/tmp/initdata.sh
-      - ./index-template.json:/tmp/index-template.json
-      - ./ingestion-pipeline.json:/tmp/ingestion-pipeline.json
-    environment:
-      ELASTIC_URL: 'http://elasticsearch-internal:9200'
-      ELASTIC_USER: 'elastic'
-      ELASTIC_PASSWORD: 'Password1'
-      KIBANA_SYSTEM_USER: 'kibana_system'
-      KIBANA_PASSWORD: 'Password1'
-      INDEX_TEMPLATE_FILE_PATH: '/tmp/index-template.json'
-      INGESTION_PIPELINE_FILE_PATH: '/tmp/ingestion-pipeline.json'
     depends_on:
-      kibana:
-        condition: service_started
+      elasticsearch-init-job:
+        condition: service_completed_successfully

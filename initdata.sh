@@ -30,14 +30,6 @@ if [ "$KIBANA_PASSWORD" == '' ]; then
   echo 'The environment variable KIBANA_PASSWORD is not set'
   exit 1
 fi
-if [ "$INDEX_TEMPLATE_FILE_PATH" == '' ]; then
-  echo 'The environment variable INDEX_TEMPLATE_FILE_PATH is not set'
-  exit 1
-fi
-if [ "$INGESTION_PIPELINE_FILE_PATH" == '' ]; then
-  echo 'The environment variable INGESTION_PIPELINE_FILE_PATH is not set'
-  exit 1
-fi
 
 #
 # Also wait until Elasticsearch is ready
@@ -71,7 +63,7 @@ echo 'Creating the Elasticsearch index template ...'
 HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_index_template/api" \
   -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
   -H "content-type: application/json" \
-  -d @"$INDEX_TEMPLATE_FILE_PATH" \
+  -d @index-template.json \
   -o "$RESPONSE_FILE" \
   -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
@@ -87,7 +79,7 @@ echo 'Creating the Elasticsearch ingestion pipeline ...'
   HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_ingest/pipeline/api" \
   -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
   -H "content-type: application/json" \
-  -d @"$INGESTION_PIPELINE_FILE_PATH" \
+  -d @ingestion-pipeline.json \
   -o "$RESPONSE_FILE" \
   -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then

@@ -5,8 +5,8 @@ filebeat.inputs:
   json:
     keys_under_root: true
     add_error_key: false
-   fields:
-     logtype: 'system'
+  fields:
+    logtype: 'system'
 
 output.elasticsearch:
   hosts: ['http://elasticsearch-internal:9200']
