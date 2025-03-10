@@ -40,10 +40,6 @@ services:
   #
   elasticsearch-init-job:
     image: elasticjob:latest
-    volumes:
-      - ./initdata.sh:/usr/job/initdata.sh
-      - ./index-template.json:/usr/job/index-template.json
-      - ./ingestion-pipeline.json:/usr/job/ingestion-pipeline.json
     environment:
       ELASTIC_URL: 'http://elasticsearch-internal:9200'
       ELASTIC_USER: 'elastic'
