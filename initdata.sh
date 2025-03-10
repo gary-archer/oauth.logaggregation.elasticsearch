@@ -5,6 +5,7 @@
 ############################################################
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
+RESPONSE_FILE=response.txt
 
 #
 # These environment variables must exist
@@ -29,8 +30,8 @@ if [ "$KIBANA_PASSWORD" == '' ]; then
   echo 'The environment variable KIBANA_PASSWORD is not set'
   exit 1
 fi
-if [ "$SCHEMA_FILE_PATH" == '' ]; then
-  echo 'The environment variable SCHEMA_FILE_PATH is not set'
+if [ "$INDEX_TEMPLATE_FILE_PATH" == '' ]; then
+  echo 'The environment variable INDEX_TEMPLATE_FILE_PATH is not set'
   exit 1
 fi
 if [ "$INGESTION_PIPELINE_FILE_PATH" == '' ]; then
@@ -52,42 +53,45 @@ done
 #
 echo 'Setting the Kibana system user password ...'
 HTTP_STATUS=$(curl -k -s -X POST "$ELASTIC_URL/_security/user/$KIBANA_SYSTEM_USER/_password" \
--u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
--H "content-type: application/json" \
--d "{\"password\":\"$KIBANA_PASSWORD\"}" \
--o /dev/null \
--w '%{http_code}')
+  -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
+  -H "content-type: application/json" \
+  -d "{\"password\":\"$KIBANA_PASSWORD\"}" \
+  -o "$RESPONSE_FILE" \
+  -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
   echo "*** Problem encountered setting the Kibana system password: $HTTP_STATUS"
+  cat "$RESPONSE_FILE"
   exit 1
 fi
 
 #
-# Create the Elasticsearch schema for apilogs
+# Create the Elasticsearch index template for API logs
 #
-echo 'Creating the Elasticsearch schema ...'
-HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_index_template/apilogs" \
--u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
--H "content-type: application/json" \
--d @"$SCHEMA_FILE_PATH" \
--o /dev/null \
--w '%{http_code}')
+echo 'Creating the Elasticsearch index template ...'
+HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_index_template/api" \
+  -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
+  -H "content-type: application/json" \
+  -d @"$INDEX_TEMPLATE_FILE_PATH" \
+  -o "$RESPONSE_FILE" \
+  -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
-  echo "*** Problem encountered creating the apilogs schema: $HTTP_STATUS"
+  echo "*** Problem encountered creating the api index template: $HTTP_STATUS"
+  cat "$RESPONSE_FILE"
   exit 1
 fi
 
 #
-# Create the Elasticsearch ingestion pipeline for apilogs
+# Create the Elasticsearch ingestion pipeline for API logs
 #
 echo 'Creating the Elasticsearch ingestion pipeline ...'
-HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_ingest/pipeline/apilogs" \
--u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
--H "content-type: application/json" \
--d @"$INGESTION_PIPELINE_FILE_PATH" \
--o /dev/null \
--w '%{http_code}')
+  HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_ingest/pipeline/api" \
+  -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
+  -H "content-type: application/json" \
+  -d @"$INGESTION_PIPELINE_FILE_PATH" \
+  -o "$RESPONSE_FILE" \
+  -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
-  echo "*** Problem encountered creating the apilogs ingestion pipeline: $HTTP_STATUS"
+  echo "*** Problem encountered creating the api ingestion pipeline: $HTTP_STATUS"
+  cat "$RESPONSE_FILE"
   exit 1
 fi

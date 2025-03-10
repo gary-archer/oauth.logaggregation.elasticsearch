@@ -2,3 +2,4 @@
 resources
 certs/*.key
 certs/*.crt
+response.txt

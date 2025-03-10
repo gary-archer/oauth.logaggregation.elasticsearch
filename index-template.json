@@ -1,5 +1,5 @@
 {
-    "index_patterns": ["apilogs*"],
+    "index_patterns": ["api-*"],
     "template": {
       "mappings": 
       {

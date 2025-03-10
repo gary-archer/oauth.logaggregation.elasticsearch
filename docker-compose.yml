@@ -4,7 +4,7 @@ services:
   # The API gateway exposes Kibana at an external HTTPS URL
   #
   apigateway:
-    image: kong/kong:3.8-ubuntu
+    image: kong/kong:3.9-ubuntu
     hostname: apigateway-internal
     ports:
       - 443:8000
@@ -25,7 +25,7 @@ services:
   # Deploy Elasticsearch using manually configured security based on trusted PKI
   #
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.2
     hostname: elasticsearch-internal
     environment:
       discovery.type: 'single-node'
@@ -39,7 +39,7 @@ services:
   # Deploy Kibana with a dummy user account different to 'elastic', to prevent startup failures
   #
   kibana:
-    image: docker.elastic.co/kibana/kibana:8.17.0
+    image: docker.elastic.co/kibana/kibana:8.17.2
     hostname: kibana-internal
     ports:
       - 5601:5601
@@ -57,7 +57,7 @@ services:
   # Deploy Filebeat to point to shares on the host computer, and with settings in the filebeat.yml file
   #
   filebeat:
-    image: docker.elastic.co/beats/filebeat:8.17.0
+    image: docker.elastic.co/beats/filebeat:8.17.2
     command: filebeat -e -strict.perms=false
     hostname: filebeat-internal
     volumes:
@@ -75,15 +75,15 @@ services:
     command: /tmp/initdata.sh
     volumes:
       - ./initdata.sh:/tmp/initdata.sh
-      - ./data/schema.json:/tmp/schema.json
-      - ./data/ingestion-pipeline.json:/tmp/ingestion-pipeline.json
+      - ./index-template.json:/tmp/index-template.json
+      - ./ingestion-pipeline.json:/tmp/ingestion-pipeline.json
     environment:
       ELASTIC_URL: 'http://elasticsearch-internal:9200'
       ELASTIC_USER: 'elastic'
       ELASTIC_PASSWORD: 'Password1'
       KIBANA_SYSTEM_USER: 'kibana_system'
       KIBANA_PASSWORD: 'Password1'
-      SCHEMA_FILE_PATH: '/tmp/schema.json'
+      INDEX_TEMPLATE_FILE_PATH: '/tmp/index-template.json'
       INGESTION_PIPELINE_FILE_PATH: '/tmp/ingestion-pipeline.json'
     depends_on:
       kibana:
