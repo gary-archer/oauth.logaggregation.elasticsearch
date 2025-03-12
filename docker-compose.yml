@@ -64,19 +64,16 @@ services:
       ELASTICSEARCH_PASSWORD: 'Password1'
       SERVER_PUBLICBASEURL: 'https://logs.authsamples-dev.com'
       SERVER_SSL_ENABLED: 'false'
-    depends_on:
-      elasticsearch:
-        condition: service_started
 
   #
   # Deploy Filebeat to point to shares on the host computer, and with settings in the filebeat.yml file
   #
   filebeat:
     image: docker.elastic.co/beats/filebeat:8.17.2
-    command: filebeat -e -strict.perms=false
+    command: filebeat -e --strict.perms=false -c /etc/filebeat/filebeat.yml
     hostname: filebeat-internal
     volumes:
-      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ./filebeat.yml:/etc/filebeat/filebeat.yml
       - ../oauth.apisample.nodejs/logs:/var/log/api
     environment:
       ELASTICSEARCH_USERNAME: 'elastic'

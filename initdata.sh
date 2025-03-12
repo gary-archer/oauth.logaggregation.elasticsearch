@@ -87,19 +87,3 @@ if [ "$HTTP_STATUS" != '200' ]; then
   cat "$RESPONSE_FILE"
   exit 1
 fi
-
-#
-# Add Elasticsearch aliases that simplify queries
-#
-echo 'Adding Elasticsearch index aliases ...'
-  HTTP_STATUS=$(curl -k -s -X POST "$ELASTIC_URL/_aliases" \
-  -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
-  -H "content-type: application/json" \
-  -d @index-aliases.json \
-  -o "$RESPONSE_FILE" \
-  -w '%{http_code}')
-if [ "$HTTP_STATUS" != '200' ]; then
-  echo "*** Problem encountered creating index aliases: $HTTP_STATUS"
-  cat "$RESPONSE_FILE"
-  exit 1
-fi
