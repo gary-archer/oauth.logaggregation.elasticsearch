@@ -50,5 +50,5 @@ Run the following command to free Docker resources:
 
 ## Further Information
 
-- See the [Elasticsearch Log Aggregation Setup](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/log-aggregation-setup.mdx) for details on how to run APIs and test clients.
-- See [API Platform Technical Support Analysis](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/api-technical-support-analysis.mdx) for some example queries on API logs.
+- See the [Elasticsearch Log Aggregation Setup](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/log-aggregation-setup.mdx) for details on the deployment.
+- See [API Technical Support Analysis](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/api-technical-support-analysis.mdx) for some example queries on API logs.
