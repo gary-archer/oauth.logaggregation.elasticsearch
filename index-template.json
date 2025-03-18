@@ -1,6 +1,9 @@
 {
-    "index_patterns": ["apilogs*"],
+    "index_patterns": ["api-*"],
     "template": {
+      "aliases": {
+        "apilogs": {}
+      },
       "mappings": 
       {
         "properties": 

@@ -36,11 +36,11 @@ fi
 sleep 5
 
 #
-# Wait until the init script completes
+# Wait until Kibana is available
 #
-echo 'Waiting for the Elastic Stack to become available ...'
 KIBANA_URL='https://logs.authsamples-dev.com/app/dev_tools#/console'
-while [ "$(docker ps | grep elasticjob)" != '' ]; do
+echo 'Waiting for the Elastic Stack to become available ...'
+while [ "$(curl -k -s -o /dev/null -w ''%{http_code}'' "$KIBANA_URL")" != '302' ]; do
   sleep 2
 done
 
