@@ -1,0 +1,12 @@
+_format_version: '3.0'
+_transform: true
+
+services:
+- name: kibana
+  url: http://kibana-internal:5601
+  routes:
+  - name: kibana-route
+    hosts:
+    - logs.authsamples-dev.com
+    paths:
+    - /
