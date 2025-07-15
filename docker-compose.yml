@@ -25,7 +25,7 @@ services:
   # Deploy Elasticsearch using manually configured security based on trusted PKI
   #
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.0.3
     hostname: elasticsearch-internal
     environment:
       discovery.type: 'single-node'
@@ -54,7 +54,7 @@ services:
   # Deploy Kibana with a dummy user account different to 'elastic', to prevent startup failures
   #
   kibana:
-    image: docker.elastic.co/kibana/kibana:8.17.2
+    image: docker.elastic.co/kibana/kibana:9.0.3
     hostname: kibana-internal
     ports:
       - 5601:5601
@@ -69,7 +69,7 @@ services:
   # Deploy Filebeat to point to shares on the host computer, and with settings in the filebeat.yml file
   #
   filebeat:
-    image: docker.elastic.co/beats/filebeat:8.17.2
+    image: docker.elastic.co/beats/filebeat:9.0.3
     command: filebeat -e --strict.perms=false -c /etc/filebeat/filebeat.yml
     hostname: filebeat-internal
     volumes:

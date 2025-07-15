@@ -1,10 +1,13 @@
 filebeat.inputs:
-- type: log
+- type: filestream
+  enabled: true
+  id: apilogs
   paths:
   - /var/log/api/api-*.log
-  json:
-    keys_under_root: true
-    add_error_key: false
+  parsers:
+  - ndjson:
+      keys_under_root: true
+      add_error_key: false
 
 output.elasticsearch:
   hosts: ['http://elasticsearch-internal:9200']
