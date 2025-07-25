@@ -20,7 +20,7 @@ fi
 #
 docker build --no-cache -t elasticjob:latest .
 if [ $? -ne 0 ]; then
-  echo '*** Elastic job docker build problem encountered'
+  echo 'Elastic job docker build problem encountered'
   exit 1
 fi
 
