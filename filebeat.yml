@@ -1,29 +1,60 @@
 filebeat.inputs:
+
+#
+# Receive API request logs with context and technical support data
+#
 - type: filestream
   enabled: true
-  id: apilogs
+  id: apirequest
   paths:
-  - /var/log/api/api-*.log
+  - /var/log/api/request-*.log
+  fields:
+    logtype: 'request'
   parsers:
   - ndjson:
       keys_under_root: true
       add_error_key: false
 
+#
+# Receive API audit logs with context and security data
+#
+- type: filestream
+  enabled: true
+  id: apiaudit
+  paths:
+  - /var/log/api/audit-*.log
+  fields:
+    logtype: 'audit'
+  parsers:
+  - ndjson:
+      keys_under_root: true
+      add_error_key: false
+
+#
+# Configure ingestoion to indices
+#
 output.elasticsearch:
   hosts: ['http://elasticsearch-internal:9200']
   username: elastic
   password: Password1
-  index: "api-%{+yyyy.MM.dd}"
+  index: "api-%{[fields.logtype]}-%{+yyyy.MM.dd}"
   pipelines:
   - pipeline: api
 
+#
+# Use template.enabled=false to disable data streams
+#
 setup:
   ilm:
     enabled: false
   template:
     name: api
     pattern: api-*
+    enabled: false
 
+#
+# Remove fields we do not want to query by
+#
 processors:
 - drop_fields:
     fields: ['agent', 'ecs', 'host', 'input', 'version']

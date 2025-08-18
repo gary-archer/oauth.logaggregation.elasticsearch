@@ -57,17 +57,30 @@ if [ "$HTTP_STATUS" != '200' ]; then
 fi
 
 #
-# Create the Elasticsearch index template for API logs
+# Create the Elasticsearch index templates
 #
-echo 'Creating the Elasticsearch index template ...'
-HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_index_template/api" \
+echo 'Creating the Elasticsearch request logs index template ...'
+HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_index_template/api-request" \
   -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
   -H "content-type: application/json" \
-  -d @index-template.json \
+  -d @index-template-request.json \
   -o "$RESPONSE_FILE" \
   -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
-  echo "*** Problem encountered creating the api index template: $HTTP_STATUS"
+  echo "*** Problem encountered creating the request logs index template: $HTTP_STATUS"
+  cat "$RESPONSE_FILE"
+  exit 1
+fi
+
+echo 'Creating the Elasticsearch audit logs index template ...'
+HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_index_template/api-audit" \
+  -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
+  -H "content-type: application/json" \
+  -d @index-template-audit.json \
+  -o "$RESPONSE_FILE" \
+  -w '%{http_code}')
+if [ "$HTTP_STATUS" != '200' ]; then
+  echo "*** Problem encountered creating the audit logs index template: $HTTP_STATUS"
   cat "$RESPONSE_FILE"
   exit 1
 fi
@@ -83,7 +96,7 @@ echo 'Creating the Elasticsearch ingestion pipeline ...'
   -o "$RESPONSE_FILE" \
   -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
-  echo "*** Problem encountered creating the api ingestion pipeline: $HTTP_STATUS"
+  echo "*** Problem encountered creating the log ingestion pipeline: $HTTP_STATUS"
   cat "$RESPONSE_FILE"
   exit 1
 fi
