@@ -3,7 +3,7 @@
   "processors": [
     {
       "drop": {
-        "if" : "ctx.apiName == null"
+        "if" : "ctx.type != 'request' && ctx.type != 'audit'"
       },
       "script": {
         "lang": "painless",
@@ -15,7 +15,7 @@
         "formats" : ["ISO8601"]
       },
       "remove": {
-        "field": ["log", "stream"],
+        "field": ["log", "stream", "type", "fields"],
         "ignore_missing": true
       }
     }

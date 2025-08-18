@@ -1,5 +1,5 @@
 {
-    "index_patterns": ["api-*"],
+    "index_patterns": ["api-request-*"],
     "template": {
       "aliases": {
         "apilogs": {}

@@ -1,0 +1,87 @@
+{
+    "index_patterns": ["api-audit-*"],
+    "template": {
+      "aliases": {
+        "apiauditlogs": {}
+      },
+      "mappings": 
+      {
+        "properties": 
+        {
+          "id": 
+          {
+            "type": "keyword"
+          },
+          "utcTime": 
+          {
+            "type": "date"
+          },
+          "apiName": 
+          {
+            "type": "keyword"
+          },
+          "operationName": 
+          {
+            "type": "keyword"
+          },
+          "hostName": 
+          {
+            "type": "keyword"
+          },
+          "method": 
+          {
+            "type": "keyword"
+          },
+          "path": 
+          {
+            "type": "keyword"
+          },
+          "resourceId": 
+          {
+            "type": "keyword"
+          },
+          "clientApplicationName": 
+          {
+            "type": "keyword"
+          },
+          "userId": 
+          {
+            "type": "keyword"
+          },
+          "statusCode": 
+          {
+            "type": "integer"
+          },
+          "errorCode": 
+          {
+            "type": "keyword"
+          },
+          "correlationId": 
+          {
+            "type": "keyword"
+          },
+          "sessionId": 
+          {
+            "type": "keyword"
+          },
+          "isAuthenticated": 
+          {
+            "type": "boolean"
+          },
+          "isAuthorized": 
+          {
+            "type": "boolean"
+          },
+          "scope": {
+            "type": "object",
+            "enabled": false
+          },
+          "claims": {
+            "type": "object",
+            "enabled": false
+          }
+        }
+      }
+    }
+  }
+  
