@@ -38,7 +38,18 @@ Run the following command to deploy Docker components for Elasticsearch, Kibana 
 ```
 
 The script waits for completion and then opens Kibana in the system browser.\
-Sign in with a username of `elastic` and a password of `Password1`, then query API logs.
+Sign in with one of the following test user accounts and a password of `Password1`.
+
+| Username | Description |
+| -------- | ----------- |
+| elastic | An Elasticsearch and Kibana administrator. |
+| support@example.com | A user with access to request logs in the apilogs index alias. |
+| security@example.com | A user with access to audit logs in the apiauditlogs index alias. |
+
+### Use Logs
+
+See the [Elasticsearch Log Aggregation Setup](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/log-aggregation-setup.mdx) for details on this deployment and local log aggregation.\
+See [API Technical Support Analysis](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/api-technical-support-analysis.mdx) for some example queries on aggregated API logs.
 
 ### Free Resources
 
@@ -47,8 +58,3 @@ Run the following command to free Docker resources:
 ```bash
 ./teardown.sh
 ```
-
-## Further Information
-
-- See the [Elasticsearch Log Aggregation Setup](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/log-aggregation-setup.mdx) for details on the deployment.
-- See [API Technical Support Analysis](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/api-technical-support-analysis.mdx) for some example queries on API logs.

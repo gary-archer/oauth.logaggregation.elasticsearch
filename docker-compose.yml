@@ -22,11 +22,13 @@ services:
       KONG_LOG_LEVEL: 'info'
 
   #
-  # Deploy Elasticsearch using manually configured security based on trusted PKI
+  # Deploy Elasticsearch using manually configured security
   #
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:9.1.2
     hostname: elasticsearch-internal
+    volumes:
+    - ./data:/usr/share/elasticsearch/data
     environment:
       discovery.type: 'single-node'
       xpack.security.enabled: 'true'
@@ -51,13 +53,11 @@ services:
         condition: service_started
 
   #
-  # Deploy Kibana with a dummy user account different to 'elastic', to prevent startup failures
+  # Deploy Kibana with a user account different to 'elastic', to prevent startup failures
   #
   kibana:
     image: docker.elastic.co/kibana/kibana:9.1.2
     hostname: kibana-internal
-    ports:
-      - 5601:5601
     environment:
       ELASTICSEARCH_HOSTS: 'http://elasticsearch-internal:9200'
       ELASTICSEARCH_USERNAME: 'kibana_system'

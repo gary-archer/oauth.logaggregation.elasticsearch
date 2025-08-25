@@ -25,6 +25,13 @@ if [ $? -ne 0 ]; then
 fi
 
 #
+# Share a host volume for Elasticsearch data and empty it on every deployment
+#
+rm -rf data 2>/dev/null
+mkdir data
+chmod 777 data
+
+#
 # Use docker compose to deploy Elasticsearch, Kibana and Filebeat
 #
 echo 'Deploying the Elastic Stack ...'

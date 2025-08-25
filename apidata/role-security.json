@@ -1,0 +1,16 @@
+{
+  "description": "Read access to audit logs",
+  "indices": [
+    {
+      "names": ["apiauditlogs"],
+      "privileges": ["read"]
+    }
+  ],
+  "applications": [
+    {
+      "application":"kibana-.kibana",
+      "privileges": ["space_all"],
+      "resources":["space:default"]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "description": "Read access to technical support logs",
+  "indices": [
+    {
+      "names": ["apilogs"],
+      "privileges": ["read"]
+    }
+  ],
+  "applications": [
+    {
+      "application":"kibana-.kibana",
+      "privileges": ["space_all"],
+      "resources":["space:default"]
+    }
+  ]
+}

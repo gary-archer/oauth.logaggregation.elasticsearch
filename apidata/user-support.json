@@ -1,0 +1,6 @@
+{
+  "full_name": "support@example.com",
+  "email": "support@example.com",
+  "password": "Password1",
+  "roles": ["api-support"]
+}
