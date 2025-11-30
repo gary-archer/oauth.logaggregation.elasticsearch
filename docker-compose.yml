@@ -76,6 +76,7 @@ services:
       - ./filebeat.yml:/etc/filebeat/filebeat.yml
       - ../oauth.apisample.nodejs/logs:/var/log/api
     environment:
+      ELASTICSEARCH_URL: 'http://elasticsearch-internal:9200'
       ELASTICSEARCH_USERNAME: 'elastic'
       ELASTICSEARCH_PASSWORD: 'Password1'
     depends_on:

@@ -34,9 +34,9 @@ filebeat.inputs:
 # Configure ingestoion to indices
 #
 output.elasticsearch:
-  hosts: ['http://elasticsearch-internal:9200']
-  username: elastic
-  password: Password1
+  hosts: ["${ELASTICSEARCH_URL}"]
+  username: "${ELASTICSEARCH_USERNAME}"
+  password: "${ELASTICSEARCH_PASSWORD}"
   index: "api-%{[fields.logtype]}-%{+yyyy.MM.dd}"
   pipelines:
   - pipeline: api
