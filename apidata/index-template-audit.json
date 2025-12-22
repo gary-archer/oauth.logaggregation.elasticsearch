@@ -73,8 +73,7 @@
             "type": "boolean"
           },
           "scope": {
-            "type": "object",
-            "enabled": false
+            "type": "keyword"
           },
           "claims": {
             "type": "object",
