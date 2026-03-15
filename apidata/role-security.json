@@ -2,7 +2,7 @@
   "description": "Read access to audit logs",
   "indices": [
     {
-      "names": ["apiauditlogs"],
+      "names": ["apiauditlogs", "api-audit-*"],
       "privileges": ["read"]
     }
   ],

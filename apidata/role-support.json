@@ -2,7 +2,7 @@
   "description": "Read access to technical support logs",
   "indices": [
     {
-      "names": ["apilogs"],
+      "names": ["apilogs", "api-request-*"],
       "privileges": ["read"]
     }
   ],
