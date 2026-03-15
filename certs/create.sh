@@ -9,7 +9,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 #
 # Do nothing if the local file exists
 #
-CERT_PATH='./authsamples-dev.ssl.p12'
+CERT_PATH='./authsamples-dev.ssl.crt'
 if [ -f "$CERT_PATH" ]; then
   exit 0
 fi

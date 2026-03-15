@@ -82,19 +82,6 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-openssl pkcs12 \
-    -export \
-    -inkey "$DOMAIN.ssl.key" \
-    -in "$DOMAIN.ssl.crt" \
-    -name "*.$DOMAIN.com" \
-    -out "$DOMAIN.ssl.p12" \
-    -passout "pass:$PRIVATE_KEY_PASSWORD"
-if [ $? -ne 0 ]; then
-  echo 'Problem encountered creating the PKCS#12 file'
-  exit 1
-fi
-
 rm ./*.csr
 chmod 644 ./*.key
-chmod 644 ./*.p12
 echo 'All certificates created successfully'

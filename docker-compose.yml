@@ -25,7 +25,7 @@ services:
   # Deploy Elasticsearch using manually configured security
   #
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:9.1.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.3.1
     hostname: elasticsearch-internal
     volumes:
     - ./data:/usr/share/elasticsearch/data
@@ -56,7 +56,7 @@ services:
   # Deploy Kibana with a user account different to 'elastic', to prevent startup failures
   #
   kibana:
-    image: docker.elastic.co/kibana/kibana:9.1.2
+    image: docker.elastic.co/kibana/kibana:9.3.1
     hostname: kibana-internal
     environment:
       ELASTICSEARCH_HOSTS: 'http://elasticsearch-internal:9200'
@@ -69,7 +69,7 @@ services:
   # Deploy Filebeat to point to shares on the host computer, and with settings in the filebeat.yml file
   #
   filebeat:
-    image: docker.elastic.co/beats/filebeat:9.1.2
+    image: docker.elastic.co/beats/filebeat:9.3.1
     command: filebeat -e --strict.perms=false -c /etc/filebeat/filebeat.yml
     hostname: filebeat-internal
     volumes:
