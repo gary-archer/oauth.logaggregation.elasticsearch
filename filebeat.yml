@@ -37,24 +37,24 @@ output.elasticsearch:
   hosts: ["${ELASTICSEARCH_URL}"]
   username: "${ELASTICSEARCH_USERNAME}"
   password: "${ELASTICSEARCH_PASSWORD}"
-  index: "api-%{[fields.logtype]}-%{+yyyy.MM.dd}"
-  pipelines:
-  - pipeline: api
+  index: "api-%{[fields.logtype]}"
+  pipeline: api
 
 #
-# Use template.enabled=false to disable data streams
+# Enable data streams with automatic removal of old data
 #
 setup:
   ilm:
     enabled: false
   template:
-    name: api
-    pattern: api-*
     enabled: false
 
 #
-# Remove fields we do not want to query by
+# Set the Elasticsearch _id to match the logged id, and remove fields we do not want to query by
 #
 processors:
+- fingerprint:
+    fields: ["id"]
+    target_field: "@metadata._id"
 - drop_fields:
     fields: ['agent', 'ecs', 'host', 'input', 'version']

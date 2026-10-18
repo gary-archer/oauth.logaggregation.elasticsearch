@@ -1,8 +1,13 @@
 {
-    "index_patterns": ["api-request-*"],
+    "index_patterns": ["api-request"],
+    "data_stream": {},
     "template": {
       "aliases": {
-        "apilogs": {}
+        "apirequestlogs": {}
+      },
+      "settings": {
+        "index.lifecycle.name": "api-request-retention",
+        "index.default_pipeline": "api"
       },
       "mappings": 
       {
@@ -12,7 +17,7 @@
           {
             "type": "keyword"
           },
-          "utcTime": 
+          "@timestamp":
           {
             "type": "date"
           },
