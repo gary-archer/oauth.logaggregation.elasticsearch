@@ -5,7 +5,7 @@ filebeat.inputs:
 #
 - type: filestream
   enabled: true
-  id: apirequest
+  id: apilogs
   paths:
   - /var/log/api/*.log
   parsers:
