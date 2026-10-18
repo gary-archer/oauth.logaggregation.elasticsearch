@@ -50,7 +50,7 @@ setup:
     enabled: false
 
 #
-# Set the Elasticsearch _id to match the logged id, and remove fields we do not want to query by
+# Generate the Elasticsearch _id from the logged id, and remove fields we do not want to query by
 #
 processors:
 - fingerprint:

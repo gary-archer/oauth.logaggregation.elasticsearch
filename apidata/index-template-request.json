@@ -3,7 +3,7 @@
     "data_stream": {},
     "template": {
       "aliases": {
-        "apirequestlogs": {}
+        "apilogs": {}
       },
       "settings": {
         "index.lifecycle.name": "api-request-retention",
