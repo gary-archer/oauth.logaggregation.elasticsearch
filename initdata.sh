@@ -57,6 +57,35 @@ if [ "$HTTP_STATUS" != '200' ]; then
 fi
 
 #
+# Create the Elasticsearch retention policies
+#
+echo 'Creating the Elasticsearch request logs retention policy ...'
+HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_ilm/policy/api-request-retention" \
+  -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
+  -H 'Content-Type: application/json' \
+  -d @retention-policy.json \
+  -o "$RESPONSE_FILE" \
+  -w '%{http_code}')
+if [ "$HTTP_STATUS" != '200' ]; then
+  cat "$RESPONSE_FILE"
+  echo "Problem encountered creating the request logs retention policy: $HTTP_STATUS"
+  exit 1
+fi
+
+echo 'Creating the Elasticsearch audit logs retention policy ...'
+HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_ilm/policy/api-audit-retention" \
+  -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
+  -H 'Content-Type: application/json' \
+  -d @retention-policy.json \
+  -o "$RESPONSE_FILE" \
+  -w '%{http_code}')
+if [ "$HTTP_STATUS" != '200' ]; then
+  cat "$RESPONSE_FILE"
+  echo "Problem encountered creating the audit logs retention policy: $HTTP_STATUS"
+  exit 1
+fi
+
+#
 # Create the Elasticsearch index templates
 #
 echo 'Creating the Elasticsearch request logs index template ...'
@@ -82,6 +111,31 @@ HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_index_template/api-audit" \
 if [ "$HTTP_STATUS" != '200' ]; then
   cat "$RESPONSE_FILE"
   echo "Problem encountered creating the audit logs index template: $HTTP_STATUS"
+  exit 1
+fi
+
+#
+# Create the Elasticsearch data streams
+#
+echo 'Creating the Elasticsearch request logs data stream ...'
+HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_data_stream/api-request" \
+  -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
+  -o "$RESPONSE_FILE" \
+  -w '%{http_code}')
+if [ "$HTTP_STATUS" != '200' ]; then
+  cat "$RESPONSE_FILE"
+  echo "Problem encountered creating the request logs data stream: $HTTP_STATUS"
+  exit 1
+fi
+
+echo 'Creating the Elasticsearch audit logs data stream ...'
+HTTP_STATUS=$(curl -k -s -X PUT "$ELASTIC_URL/_data_stream/api-audit" \
+  -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
+  -o "$RESPONSE_FILE" \
+  -w '%{http_code}')
+if [ "$HTTP_STATUS" != '200' ]; then
+  cat "$RESPONSE_FILE"
+  echo "Problem encountered creating the audit logs data stream: $HTTP_STATUS"
   exit 1
 fi
 

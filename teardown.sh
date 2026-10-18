@@ -9,4 +9,4 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 #
 # Do the teardown
 #
-docker compose --project-name elasticstack down
+docker compose down

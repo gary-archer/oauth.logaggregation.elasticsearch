@@ -4,18 +4,18 @@
     {
       "drop": {
         "if" : "ctx.type != 'request' && ctx.type != 'audit'"
-      },
-      "script": {
-        "lang": "painless",
-        "description": "Use a client side unique id to prevent duplicates",
-        "source": "ctx._id = ctx.id"
-      },
+      }
+    },
+    {
       "date" : {
         "field" : "utcTime",
+        "target_field": "@timestamp",
         "formats" : ["ISO8601"]
-      },
+      }
+    },
+    {
       "remove": {
-        "field": ["log", "stream", "type", "fields"],
+        "field": ["log", "stream", "type", "utcTime", "fields"],
         "ignore_missing": true
       }
     }

@@ -35,7 +35,7 @@ chmod 777 data
 # Use docker compose to deploy Elasticsearch, Kibana and Filebeat
 #
 echo 'Deploying the Elastic Stack ...'
-docker compose --project-name elasticstack up --force-recreate --detach
+docker compose up --force-recreate --detach
 if [ $? -ne 0 ]; then
   echo "Problem encountered running Docker image"
   exit 1
