@@ -1,43 +1,26 @@
 filebeat.inputs:
 
 #
-# Receive API request logs with context and technical support data
+# Receive all API logs
 #
 - type: filestream
   enabled: true
   id: apirequest
   paths:
-  - /var/log/api/request-*.log
-  fields:
-    logtype: 'request'
+  - /var/log/api/*.log
   parsers:
   - ndjson:
       keys_under_root: true
       add_error_key: false
 
 #
-# Receive API audit logs with context and security data
-#
-- type: filestream
-  enabled: true
-  id: apiaudit
-  paths:
-  - /var/log/api/audit-*.log
-  fields:
-    logtype: 'audit'
-  parsers:
-  - ndjson:
-      keys_under_root: true
-      add_error_key: false
-
-#
-# Configure ingestoion to indices
+# Configure ingestion to the request log by default - for audit logs this gets overwritten by the ingestion pipeline
 #
 output.elasticsearch:
   hosts: ["${ELASTICSEARCH_URL}"]
   username: "${ELASTICSEARCH_USERNAME}"
   password: "${ELASTICSEARCH_PASSWORD}"
-  index: "api-%{[fields.logtype]}"
+  index: api-request
   pipeline: api
 
 #

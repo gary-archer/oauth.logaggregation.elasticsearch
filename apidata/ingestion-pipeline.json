@@ -15,8 +15,14 @@
     },
     {
       "remove": {
-        "field": ["log", "stream", "type", "utcTime", "fields"],
+        "field": ["fields", "log", "stream"],
         "ignore_missing": true
+      }
+    },
+    {
+      "reroute": {
+        "if": "ctx.type == 'audit'",
+        "destination": "api-audit"
       }
     }
   ]
