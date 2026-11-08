@@ -70,9 +70,7 @@ case "$(uname -s)" in
 esac
 
 #
-# Open the Kibana URL and login with the following test credentials
-# - elastic
-# - Password1
+# Open the Kibana URL and login with the elastic / Password1 test credential
 #
 if [ "$PLATFORM" == 'MACOS' ]; then
 

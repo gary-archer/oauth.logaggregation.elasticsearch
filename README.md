@@ -7,15 +7,16 @@ This is part of an overall [Effective API Logging](https://github.com/gary-arche
 
 First ensure that a Docker engine is installed.
 
-### Configure DNS and SSL
+## Local Development Quick Start
 
-Configure custom development domains by adding this DNS entry to your hosts file:
+The log aggregation system uses a [Real World OAuth Development URL](https://github.com/gary-archer/oauth.blog/blob/master/public/posts/developer-ssl-setup.mdx#real-world-oauth-development-urls) on a local computer.  
+You must use admin permissions to configure infrastructure, starting with DNS entries in your `/etc/hosts` file:
 
 ```bash
 127.0.0.1 localhost logs.authsamples-dev.com
 ```
 
-Install OpenSSL 3+ if required, create a secrets folder, then create development certificates:
+Make sure OpenSSL 3+ is installed, specify a secrets folder, then create development certificates:
 
 ```bash
 export SECRETS_FOLDER="$HOME/secrets"
@@ -23,7 +24,7 @@ mkdir -p "$SECRETS_FOLDER"
 ./certs/create.sh
 ```
 
-Then configure [Browser SSL Trust](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/developer-ssl-setup.mdx#trust-a-root-certificate-in-browsers) for the SSL root certificate at this location:
+Then, configure [Browser HTTPS Trust](https://github.com/gary-archer/oauth.blog/blob/master/public/posts/developer-ssl-setup.mdx#configure-operating-system-trust) for the SSL root certificate at the following location:
 
 ```text
 ./certs/authsamples-dev.ca.crt
