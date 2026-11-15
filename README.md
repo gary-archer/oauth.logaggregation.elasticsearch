@@ -7,10 +7,22 @@ This is part of an overall [Effective API Logging](https://github.com/gary-arche
 
 First ensure that a Docker engine is installed.
 
+API performance is a little suboptimal, due to the nature of the AWS API gateway:
+
+- SPA requests first call the AWS API gateway for the BFF domain and invoke the wildcard lambda.  
+- The wildcard lambdas then makes an upstream request to AWS API gateway for the API domain.  
+
+See the [Cloud Native Token Handler](https://github.com/gary-archer/oauth.tokenhandler.cloudnative) for a better performing token handler with the same architecture.
+
 ## Local Development Quick Start
 
-The log aggregation system uses a [Real World OAuth Development URL](https://github.com/gary-archer/oauth.blog/blob/master/public/posts/developer-ssl-setup.mdx#real-world-oauth-development-urls) on a local computer.  
-You must use admin permissions to configure infrastructure, starting with DNS entries in your `/etc/hosts` file:
+Run the code sample from a terminal on Linux, macOS or Windows (with Git bash).  
+The SPA and API use [Real World OAuth Development URLs](https://github.com/gary-archer/oauth.blog/blob/master/public/posts/developer-ssl-setup.mdx#real-world-oauth-development-urls) on a local computer.  
+
+### Administrator Setup
+
+You must use admin permissions to configure infrastructure before you run the code.  
+First, add DNS entries in your `/etc/hosts` file:
 
 ```bash
 127.0.0.1 localhost logs.authsamples-dev.com
